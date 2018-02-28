@@ -1,60 +1,58 @@
 <template lang="html">
-  <button class="lav-button" :type="type" @click="$emit('click')">
-    <slot></slot>
-    <span class="lav-button__icon">
-      <svg v-show="!loading" x="0px" y="0px" viewBox="0 0 284.9 284.9">
-        <path d="M222.7,135.9l-133-133C87.7,1,85.6,0,83.1,0c-2.5,0-4.7,1-6.6,2.9L62.2,17.1c-1.9,1.9-2.9,4.1-2.9,6.6s0.9,4.7,2.9,6.6
-        l112.2,112.2L62.2,254.7c-1.9,1.9-2.9,4.1-2.9,6.6c0,2.5,0.9,4.7,2.9,6.6l14.3,14.3c1.9,1.9,4.1,2.9,6.6,2.9c2.5,0,4.7-1,6.6-2.9
-        l133-133c1.9-1.9,2.9-4.1,2.9-6.6S224.6,137.8,222.7,135.9z"/>
-      </svg>
-    </span>
+  <button class="bf" @click="handler">
+    <span v-if="!loading"><slot></slot></span>
+    <svg class="ska" v-if="loading" viewBox='0 0 150 50'>
+      <rect x='0' y='0' height='50' width='150' fill='none' stroke='#fff' stroke-width='5' stroke-linecap='round'
+        stroke-dasharray='50 350' stroke-dashoffset='0'>
+      </rect>
+    </svg>
   </button>
 </template>
 
 <script>
 export default {
-  props: {
-    type: {
-      type: String,
-      default: ''
-    }
-  },
   data() {
     return {
       loading: false
     }
+  },
+  props: {
+    type: {
+      type: String,
+      default: 'button'
+    }
+  },
+  methods: {
+    handler(e) {
+      this.loading = !this.loading;
+    }
   }
 }
 </script>
-
 <style lang="css">
-.lav-button {
+
+.bf {
   position: relative;
+  height: 50px;
+  width: 150px;
+  background: rgb(2, 134, 194);
   border: none;
-  padding: 10px 50px 10px 25px;
+  padding: 0;
   outline: none;
-  min-height: 42px;
-  border-radius: 22px;
   color: #fff;
-  background-color: rgb(55, 172, 223);
 }
-.lav-button__icon {
+.ska {
   position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  right: 4px;
-  top: 4px;
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
-  background-color: rgb(55, 172, 223);
-  color: #fff;
-  height: 34px;
-  width: 34px;
+  top: 0;
+  left: 0;
 }
-.lav-button__icon svg {
-  height: 15px;
-  width: 15px;
-  fill: #fff;
+.ska rect {
+  animation: zalupa 1.5s infinite linear;
+}
+
+@keyframes zalupa {
+  to {
+    stroke-dashoffset: -400;
+  }
 }
 </style>
