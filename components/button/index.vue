@@ -24,7 +24,8 @@ export default {
   },
   methods: {
     handler(e) {
-      this.loading = !this.loading;
+      this.$emit('click', e);
+      // this.loading = !this.loading;
     }
   }
 }
