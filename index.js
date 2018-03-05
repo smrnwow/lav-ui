@@ -6,6 +6,11 @@ import lavContainer from './components/layout/container/index.vue';
 import lavSidebar from './components/layout/sidebar/index.vue';
 import lavContent from './components/layout/content/index.vue';
 import lavSelect from './components/select/index.vue';
+import lavCheckbox from './components/checkbox/index.vue';
+import lavNotification from './components/notification/index.js'; 
+import lavDropdown from './components/dropdown/index.vue';
+import lavInput from './components/input/index.vue';
+import lavAvatar from './components/avatar/index.vue';
 
 
 const LavUI = {
@@ -17,6 +22,11 @@ const LavUI = {
     lavContent,
     lavSelect,
     lavButton,
+    lavCheckbox,
+    lavNotification,
+    lavDropdown,
+    lavInput,
+    lavAvatar,
 
     install(Vue) {
         Vue.component('lav-gallery', lavGallery);
@@ -27,6 +37,13 @@ const LavUI = {
         Vue.component('lav-content', lavContent);
         Vue.component('lav-select', lavSelect);
         Vue.component('lav-button', lavButton);
+        Vue.component('lav-checkbox', lavCheckbox);
+        Vue.component('lav-notification', lavNotification);
+        Vue.component('lav-dropdown', lavDropdown);
+        Vue.component('lav-input', lavInput);
+        Vue.component('lav-avatar', lavAvatar);
+
+        Vue.prototype.$lavNotify = lavNotification;
     }
 };
 
@@ -45,3 +62,8 @@ export { lavSidebar };
 export { lavContent };
 export { lavSelect };
 export { lavButton };
+export { lavCheckbox };
+export { lavNotification };
+export { lavDropdown };
+export { lavInput };
+export { lavAvatar };

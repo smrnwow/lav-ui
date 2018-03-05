@@ -1,12 +1,18 @@
 {
-  "name": "pets",
+  "name": "LavUI",
   "version": "1.0.0",
-  "description": "",
+  "description": "Another one ui lib",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "flow": "flow"
   },
-  "author": "",
+  "homepage": "https://hooleynet.github.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lavinge/lav-ui.git"
+  },
+  "author": "hooleynet",
   "license": "ISC",
   "dependencies": {
     "vue": "^2.5.13",
@@ -21,6 +27,7 @@
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.6",
+    "flow-bin": "^0.66.0",
     "html-loader": "^0.5.5",
     "style-loader": "^0.19.1",
     "vue-loader": "^13.7.0",

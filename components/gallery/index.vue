@@ -20,8 +20,8 @@
                                 C400.004,190.438,392.251,182.686,382.688,182.686z"/>
                         </svg>
                     </button>
-                    <transition name="fade">
-                        <img class="selected__image" :key="images[active]" :src="images[active]" />
+                    <transition name="zalupa">
+                        <img class="selected__image" :key="active" :src="images[active]" />
                     </transition>
                     <button class="arrow arrow_right" @click="next" :class="[nextDisabled]">
                         <svg x="0px" y="0px" viewBox="0 0 400 400">
@@ -33,63 +33,17 @@
                 </div>
             </div>
             <div class="thumbs">
-                <div v-for="(src, i) in images" class="thumbs__item" :class="[getActive(i)]" @click="select(i)" 
-                    :style="{ backgroundImage: 'url(' + src + ')' }"></div>
+                <div class="thumbs__wrap">
+                    <div v-for="(src, i) in images" class="thumbs__item" :class="[getActive(i)]" @click="select(i)" 
+                         ref="thumb" :style="thumbSize(src)">
+                    </div>
+                </div>
             </div>
         </div>
     </transition>
 </template>
 
-<script>
-export default {
-    props: {
-        images: {
-            type: Array,
-            default: () => ([])
-        }
-    },
-    data() {
-        return {
-            active: 0,
-            visible: false
-        }
-    },
-    methods: {
-        open() {
-            this.visible = true;
-        },
-        close() {
-            this.visible = false;
-        },
-        select(index) {
-            this.active = index;
-        },
-        getActive(index) {
-            return (this.active === index) ? 'thumbs__item_active' : '';
-        },
-        next() {
-            if(this.active < this.images.length - 1) {
-                this.active++;
-                console.log(this.active, this.images.length);
-            }
-        },
-        prev() {
-            if(this.active > 0) {
-                this.active--;
-                console.log(this.active, this.images.length);
-            }
-        }
-    },
-    computed: {
-        prevDisabled() {
-            return (this.active <= 0) ? 'arrow_disabled' : '';
-        },
-        nextDisabled() {
-            return (this.active >= this.images.length - 1) ? 'arrow_disabled' : '';
-        }
-    }
-}
-</script>
+<script src="./index.js"></script>
 
 <style lang="css">
 body {
@@ -115,8 +69,8 @@ body {
   height: 30px;
   width: 30px;
   cursor: pointer;
-  top: 50px;
-  right: 50px;
+  top: 15px;
+  right: 15px;
   background-color: transparent;
 }
 .close-icon {
@@ -146,13 +100,15 @@ body {
     height: 100%;
     z-index: 100;
     background: rgba(0,0,0,.8);
-    padding: 30px 0;
+    overflow: auto;
 }
 .wrap {
     width: 100%;
-    height: 70%;
+    height: 85%;
+    padding: 15px 0;
     display: flex;
-    justify-content: center
+    justify-content: center;
+    align-items: center;
 }
 .selected {
     position: relative;
@@ -161,22 +117,33 @@ body {
 }
 .selected__image {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100%;
+    user-select: none;
 }
 .thumbs {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30%;
+    height: 15%;
+    background-color: rgba(0,0,0,1);
+}
+.thumbs__wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    width: 70%;
+    padding: 15px 0;
+    height: 100%;
 }
 .thumbs__item {
     position: relative;
     margin: 10px;
-    height: 100px;
-    width: 100px;
+    height: 100%;
+    width: 100%;
     background-position: center;
     background-size: cover;
     cursor: pointer;
@@ -193,9 +160,10 @@ body {
     background-color: rgba(0,0,0,0);
 }
 .fade-enter-active, .fade-leave-active {
-  transition: .4s ease-in-out;
+  transition: .2s ease-in-out;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+  transform: scale(1.2);
 }
 </style>

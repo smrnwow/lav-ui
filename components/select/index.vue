@@ -202,6 +202,7 @@ export default {
 <style lang="css">
 .search-input {
   position: relative;
+  display: block;
   width: 100%;
 }
 .search-input__cleaner {
