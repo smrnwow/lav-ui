@@ -1,5 +1,5 @@
 import lavAvatar from './components/avatar/index.vue';
-import lavBreadcrumbs from './components/breadcumbs/index.vue';
+import lavBreadcrumbs from './components/breadcrumbs/index.vue';
 import lavButton from './components/button/index.vue';
 import lavCard from './components/card/index.vue';
 import lavCheckbox from './components/checkbox/index.vue';

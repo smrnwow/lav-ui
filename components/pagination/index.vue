@@ -1,12 +1,9 @@
 <template lang="html">
   <div class="pagination">
     <div v-show="!loading" class="w-100">
-      <masonry :cols="cols" :gutter="30">
-        <component v-for="(item, i) in data" :index="i" :key="i" :is="type" :data="item" />
-      </masonry>
       <div v-html="noDataText" v-if="hasNoData"></div>
     </div>
-    <loader v-show="loading" position="center" size="full" />
+    <!-- <loader v-show="loading" position="center" size="full" /> -->
     <div class="pagination__steps">
       <button v-if="hasPrev" class="btn btn-primary btn-sm" @click="prevPage">
         <i class="fa fa-angle-left"></i>
@@ -27,14 +24,7 @@
   </div>
 </template>
 <script>
-import loader from '@components/loader';
-import post from '@components/post';
-import channel from '@components/channel';
-import favsChannel from '@components/channel/favs-channel.vue';
-import VueMasonry from 'vue-masonry-css'
-Vue.use(VueMasonry);
 export default {
-  components: { post, channel, favsChannel, loader },
   data() {
     return {
       loading: true,

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { lavFileInput } from '@ui';
+import { lavFileInput } from '../file-input/index.vue';
 export default {
   components: { lavFileInput },
   props: {
