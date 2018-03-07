@@ -15,10 +15,7 @@ export default {
   },
   methods: {
     open() {
-
       this.visible = true;
-      console.log(this.$refs.thumb[0].getBoundingClientRect().height + 'px');
-      
       this.$nextTick(() => {
         console.log();
         

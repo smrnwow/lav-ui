@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="lav-images-grid" ref="wrap" :style="{ height }">
     <div v-for="(src, i) in images" class="lav-images-grid__item" :style="getSize(i)" :key="i">
-      <div class="lav-images-grid__image" :style="{ backgroundImage: 'url(http://localhost:3333/' + src + ')' }"></div>
+      <div class="lav-images-grid__image" :style="{ backgroundImage: 'url(' + src + ')' }"></div>
     </div>
     <lav-file-input v-if="downloader" />
   </div>

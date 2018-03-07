@@ -24,26 +24,33 @@ export default {
     }
   },
   mounted() {
-    this.line = {
-      width: this.horizontal ? this.$children[this.current].$el.getBoundingClientRect().width + 'px' : '100%',
-      left: this.horizontal ? this.$children[this.current].$el.getBoundingClientRect().left - this.$el.getBoundingClientRect().left + 'px' : 0,
-      height: this.vertical ? this.$children[this.current].$el.getBoundingClientRect().height + 'px' : 'auto',
-      top: this.vertical ? this.$children[this.current].$el.getBoundingClientRect().top - this.$el.getBoundingClientRect().top + 'px' : 'auto',
-      bottom: this.horizontal ? 0 : 'auto'
-    };
+    this.calcSizeLine();
+    window.addEventListener('resize', this.calcSizeLine);
     this.$on('change-tab', ({ data, index }) => {
       this.line = data;
     });
   },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.calcSizeLine);
+  },
   methods: {
     calc() {
-        let childWidth = 0;
-        for(let item in this.$children) {
-            childWidth += this.$children[item].$el.getBoundingClientRect().width;
-        }
-        if(childWidth > this.$el.getBoundingClientRect().width) {
-            console.log(childWidth - this.$el.getBoundingClientRect().width)
-        }
+      let childWidth = 0;
+      for(let item in this.$children) {
+          childWidth += this.$children[item].$el.getBoundingClientRect().width;
+      }
+      if(childWidth > this.$el.getBoundingClientRect().width) {
+          console.log(childWidth - this.$el.getBoundingClientRect().width)
+      }
+    },
+    calcSizeLine() {
+      this.line = {
+        width: this.horizontal ? this.$children[this.current].$el.getBoundingClientRect().width + 'px' : '100%',
+        left: this.horizontal ? this.$children[this.current].$el.getBoundingClientRect().left - this.$el.getBoundingClientRect().left + 'px' : 0,
+        height: this.vertical ? this.$children[this.current].$el.getBoundingClientRect().height + 'px' : 'auto',
+        top: this.vertical ? this.$children[this.current].$el.getBoundingClientRect().top - this.$el.getBoundingClientRect().top + 'px' : 'auto',
+        bottom: this.horizontal ? 0 : 'auto'
+      };
     }
   },
   computed: {
@@ -78,7 +85,7 @@ export default {
     position: relative;
     display: flex;
     align-items: center;
-    background-color: #007FB2;
+    /* background-color: #007FB2; */
     border-radius: 5px;
 }
 .tab {
@@ -95,7 +102,7 @@ export default {
     position: absolute;
     bottom: 0;
     height: 4px;
-    background-color: rgba(0,0,0,.15);
+    background-color: rgba(255,255,255,.15);
     transition: .2s ease-in-out;
     border-radius: 4px;
 }

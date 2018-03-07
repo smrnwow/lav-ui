@@ -100,7 +100,8 @@ body {
     height: 100%;
     z-index: 100;
     background: rgba(0,0,0,.8);
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .wrap {
     width: 100%;
@@ -114,6 +115,7 @@ body {
     position: relative;
     width: 70%;
     height: 100%;
+    /* overflow-x: hidden; */
 }
 .selected__image {
     position: absolute;
@@ -159,11 +161,13 @@ body {
 .thumbs__item_active:after {
     background-color: rgba(0,0,0,0);
 }
-.fade-enter-active, .fade-leave-active {
-  transition: .2s ease-in-out;
+.zalupa-enter-active, .zalupa-leave-active {
+  transition: .4s ease-in-out;
 }
-.fade-enter, .fade-leave-to {
+.zalupa-enter {
   opacity: 0;
-  transform: scale(1.2);
+}
+.zalupa-leave-to {
+  opacity: 0;
 }
 </style>

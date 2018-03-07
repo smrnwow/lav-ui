@@ -3,6 +3,7 @@ import lavBreadcrumbs from './components/breadcrumbs/index.vue';
 import lavButton from './components/button/index.vue';
 import lavCard from './components/card/index.vue';
 import lavCheckbox from './components/checkbox/index.vue';
+import lavDivider from './components/divider/index.vue';
 import lavDropdown from './components/dropdown/index.vue';
 import lavFileInput from './components/file-input/index.vue';
 import lavGallery from './components/gallery/index.vue';
@@ -27,6 +28,7 @@ import lavContent from './components/layout/content/index.vue';
 
 
 
+console.log(lavGallery);
 
 
 
@@ -38,6 +40,7 @@ const LavUI = {
     lavButton,
     lavCard,
     lavCheckbox,
+    lavDivider,
     lavDropdown,
     lavFileInput,
     lavGallery,
@@ -66,6 +69,7 @@ const LavUI = {
         Vue.component('lav-button', lavButton);
         Vue.component('lav-card', lavCard);
         Vue.component('lav-checkbox', lavCheckbox);
+        Vue.component('lav-divider', lavDivider);
         Vue.component('lav-dropdown', lavDropdown);
         Vue.component('lav-file-input', lavFileInput);
         Vue.component('lav-gallery', lavGallery);
@@ -90,7 +94,7 @@ const LavUI = {
         // Vue.component('lav-notification', lavNotification);
         
         
-
+        Vue.prototype.$lavGallery = lavGallery.methods;
         Vue.prototype.$lavNotify = lavNotification;
     }
 };
@@ -107,6 +111,7 @@ export { lavBreadcrumbs };
 export { lavButton };
 export { lavCard };
 export { lavCheckbox };
+export { lavDivider };
 export { lavDropdown };
 export { lavFileInput };
 export { lavGallery };
