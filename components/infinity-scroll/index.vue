@@ -1,20 +1,7 @@
 <template lang="html">
-  <div class="infinity" :id="randomId">
-    <transition-group name="fade">
-      <div class="up" v-if="arrowsVisible && upVisible" @click="up" :key="1">
-        <div class="up__inner">
-          <i class="fa fa-chevron-up up__icon" aria-hidden="true"></i>
-        </div>
-      </div>
-      <div class="down" v-if="arrowsVisible && !upVisible && prevPos" @click="down" :key="2">
-        <div class="up__inner">
-          <i class="fa fa-chevron-down up__icon" aria-hidden="true"></i>
-        </div>
-      </div>
-    </transition-group>
-    <div class="w-100">
-      <div v-html="noDataText" v-if="hasNoData"></div>
-    </div>
+  <div class="lav-infinity-scroll" :id="randomId">
+    <slot></slot>
+
     <!-- <loader v-if="displayLoader" :position="calcLoaderPosition" :size="calcLoaderSize" /> -->
   </div>
 </template>

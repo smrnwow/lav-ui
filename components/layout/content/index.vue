@@ -14,7 +14,8 @@ export default {
 <style scoped>
 .content {
     position: relative;
-    flex-grow: 9;
+    width: 85%;
+    margin-left: 15%;
     padding: 10px;
 }
 </style>

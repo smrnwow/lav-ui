@@ -38,10 +38,10 @@ export default {
           styles = {};
       if(index === 0) {
         styles['width'] = '100%';
-        styles['height'] = '78%';
+        styles['height'] = '80%';
       } else {
         styles['width'] = (100 / (this.images.length - 1)) + '%';
-        styles['height'] = '22%';
+        styles['height'] = '20%';
       }
       return styles;
     }

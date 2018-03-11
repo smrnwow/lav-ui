@@ -1,11 +1,13 @@
 <template lang="html">
-  <transition name="fade">
-    <div v-show="visible" class="notification" :class="[notifType]" @click="close">
+  <transition name="notif">
+    <div v-show="visible" class="notification" :class="[classes]" @click="handleClick" 
+      @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
       <div class="notification__header">
         <slot name="icon"></slot>
       </div>
       <div class="notification__body">
-        test message
+        {{ text }}
+        id: {{ id }}
       </div>
     </div>
   </transition>
@@ -16,20 +18,44 @@ export default {
   data() {
     return {
       type: 'info',
+      position: 'top-right',
       visible: false
     }
   },
   methods: {
-    close() {
+    handleClick() {
+      this.destroy();
+    },
+    handleMouseEnter() {
+      this.finishTimer();
+    },
+    handleMouseLeave() {
+      this.startTimer();
+    },
+    destroy() {
       this.visible = false;
-      this.$emit('close', this.id);
-      this.$destroy();
-      this.$el.parentNode.removeChild(this.$el);
+      setTimeout(() => {
+        this.$emit('close', this.id);
+        this.$destroy();
+        this.$el.parentNode.removeChild(this.$el);
+      }, 200)
+    },
+    startTimer() {
+      this.timer = setTimeout(this.destroy, 5000);
+    },
+    finishTimer() {
+      clearTimeout(this.timer);
     }
   },
+  mounted() {
+    this.startTimer();
+  },
   computed: {
-    notifType() {
-      return `notification_${this.type}`;
+    classes() {
+      return [
+        `notification_${this.type}`,
+        `notification_${this.position.split('-')[1]}`
+      ]
     }
   }
 }
@@ -39,13 +65,18 @@ export default {
 .notification {
   display: flex;
   position: fixed;
-  top: 100px;
-  right: 50px;
   width: 400px;
   background: #fff;
   box-shadow: 0 3px 6px rgba(0,0,0,.1);
   cursor: pointer;
+  transition: .1s ease-in-out;
   /* border-radius: 5px; */
+}
+.notification_right {
+  right: 20px;
+}
+.notification_left {
+  left: 20px;
 }
 .notification__header {
   display: flex;
@@ -72,10 +103,14 @@ export default {
 .notification_alert {
   border-left: 3px solid red;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .2s ease-in-out;
+.notif-leave-active {
+  transition: .2s ease-in-out;
 }
-.fade-enter, .fade-leave-to {
+.notif-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+.notif-enter {
   opacity: 0;
 }
 </style>

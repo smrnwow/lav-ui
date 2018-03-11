@@ -1,13 +1,11 @@
 <template lang="html">
-  <label class="search-input" ref="wrap">
-    <button class="search-input__value" type="button" @focus="startSearching">
-      <span v-if="!selected.length">{{ placeholder }}</span>
-      <span v-if="!multiply && selected.length">{{ selected[0] }}</span>
+  <label class="lav-label" ref="wrap">
+    <span class="lav-input-wrap">
       <span v-if="multiply && selected.length">
-        <small class="search-input__selected" v-for="(item, i) in selected" @click.stop="removeSelected(i)" :key="i">
+        <small class="lav-select-selected" v-for="(item, i) in selected" @click.stop="removeSelected(i)" :key="i">
           {{ item }}
-          <span class="search-input__selected-remove">
-            <svg class="search-input__selected-icon" x="0px" y="0px" viewBox="0 0 21.9 21.9">
+          <span class="lav-select-selected-remove">
+            <svg class="lav-select-selected-icon" x="0px" y="0px" viewBox="0 0 21.9 21.9">
               <path d="M14.1,11.3c-0.2-0.2-0.2-0.5,0-0.7l7.5-7.5c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7l-1.4-1.4C20,0.1,19.7,0,19.5,0
               c-0.3,0-0.5,0.1-0.7,0.3l-7.5,7.5c-0.2,0.2-0.5,0.2-0.7,0L3.1,0.3C2.9,0.1,2.6,0,2.4,0S1.9,0.1,1.7,0.3L0.3,1.7C0.1,1.9,0,2.2,0,2.4 s0.1,0.5,0.3,0.7l7.5,7.5c0.2,0.2,0.2,0.5,0,0.7l-7.5,7.5C0.1,19,0,19.3,0,19.5s0.1,0.5,0.3,0.7l1.4,1.4c0.2,0.2,0.5,0.3,0.7,0.3
               s0.5-0.1,0.7-0.3l7.5-7.5c0.2-0.2,0.5-0.2,0.7,0l7.5,7.5c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l1.4-1.4c0.2-0.2,0.3-0.5,0.3-0.7
@@ -16,29 +14,34 @@
           </span>
         </small>
       </span>
-    </button>
-    <span class="search-input__cleaner" v-if="after" @click="clearInput">
-      <svg class="search-input__cleaner-icon" v-if="cleanerVisible" x="0px" y="0px" viewBox="0 0 21.9 21.9">
-        <path d="M14.1,11.3c-0.2-0.2-0.2-0.5,0-0.7l7.5-7.5c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7l-1.4-1.4C20,0.1,19.7,0,19.5,0
-        c-0.3,0-0.5,0.1-0.7,0.3l-7.5,7.5c-0.2,0.2-0.5,0.2-0.7,0L3.1,0.3C2.9,0.1,2.6,0,2.4,0S1.9,0.1,1.7,0.3L0.3,1.7C0.1,1.9,0,2.2,0,2.4 s0.1,0.5,0.3,0.7l7.5,7.5c0.2,0.2,0.2,0.5,0,0.7l-7.5,7.5C0.1,19,0,19.3,0,19.5s0.1,0.5,0.3,0.7l1.4,1.4c0.2,0.2,0.5,0.3,0.7,0.3
-        s0.5-0.1,0.7-0.3l7.5-7.5c0.2-0.2,0.5-0.2,0.7,0l7.5,7.5c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l1.4-1.4c0.2-0.2,0.3-0.5,0.3-0.7
-        s-0.1-0.5-0.3-0.7L14.1,11.3z"/>
+      <button v-if="!searching" class="lav-input" type="button" @focus="startSearching">
+        <span v-if="!selected.length">{{ placeholder }}</span>
+        <span v-if="!multiply && selected.length">{{ selected[0] }}</span>
+      </button>
+      <input v-if="searchable && searching" class="lav-input" tabindex type="text" v-model="searchString" @input="search" placeholder="Поиск"
+        @keydown.down="scrollDropdown" @keydown.up="scrollDropdown" @keydown.enter="keyBoardSelect" ref="searchInput" />
+      <span v-if="cleanerVisible" class="lav-input-cleaner" @click="clearInput">
+        <svg class="lav-icon" x="0px" y="0px" viewBox="0 0 21.9 21.9">
+          <path d="M14.1,11.3c-0.2-0.2-0.2-0.5,0-0.7l7.5-7.5c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7l-1.4-1.4C20,0.1,19.7,0,19.5,0
+          c-0.3,0-0.5,0.1-0.7,0.3l-7.5,7.5c-0.2,0.2-0.5,0.2-0.7,0L3.1,0.3C2.9,0.1,2.6,0,2.4,0S1.9,0.1,1.7,0.3L0.3,1.7C0.1,1.9,0,2.2,0,2.4s0.1,0.5,0.3,0.7l7.5,7.5c0.2,0.2,0.2,0.5,0,0.7l-7.5,7.5C0.1,19,0,19.3,0,19.5s0.1,0.5,0.3,0.7l1.4,1.4c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l7.5-7.5c0.2-0.2,0.5-0.2,0.7,0l7.5,7.5c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l1.4-1.4c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7L14.1,11.3z"/>
+        </svg>
+      </span>
+    </span>
+    <span class="lav-input-after">
+      <svg class="lav-icon" x="0px" y="0px" viewBox="0 0 459 459">
+        <path d="M282.082,76.511l-14.274-14.273c-1.902-1.906-4.093-2.856-6.57-2.856c-2.471,0-4.661,0.95-6.563,2.856L142.466,174.441
+          L30.262,62.241c-1.903-1.906-4.093-2.856-6.567-2.856c-2.475,0-4.665,0.95-6.567,2.856L2.856,76.515C0.95,78.417,0,80.607,0,83.082
+          c0,2.473,0.953,4.663,2.856,6.565l133.043,133.046c1.902,1.903,4.093,2.854,6.567,2.854s4.661-0.951,6.562-2.854L282.082,89.647
+          c1.902-1.903,2.847-4.093,2.847-6.565C284.929,80.607,283.984,78.417,282.082,76.511z"/>
       </svg>
-      <i v-if="!cleanerVisible" class="fa fa-chevron-down" aria-hidden="true"></i>
     </span>
     <transition name="fade">
-      <div class="search-input__dropdown" v-show="dropdownVisible">
-        <div class="search-input__search" v-if="searchable">
-          <input class="search-input__search-field" tabindex type="text" v-model="searchString" @input="search" placeholder="Поиск"
-            @keydown.down="scrollDropdown" @keydown.up="scrollDropdown" @keydown.enter="keyBoardSelect" ref="searchInput" />
+      <div v-show="dropdownVisible" class="lav-select-dropdown" ref="dropdown">
+        <div v-for="(option, i) in getOptions" :key="option.value" class="lav-select-dropdown-item" @click="select(option, i)"
+          :class="[getActive(option), getHovered(i)]" @mouseenter="setCursor(i)">
+          {{ option.name }}
         </div>
-        <div class="search-input__dropdown-list" ref="dropdown">
-          <div v-for="(option, i) in getOptions" :key="option.value" class="search-input__dropdown-item" @click="select(option, i)"
-            :class="[getActive(option), getHovered(i)]" @mouseenter="setCursor(i)">
-            {{ option.name }}
-          </div>
-          <div v-if="showNoDataOption" class="search-input__dropdown-item">Ничего не найдено</div>
-        </div>
+        <div v-if="showNoDataOption" class="lav-select-dropdown-item">Ничего не найдено</div>
       </div>
     </transition>
   </label>
@@ -81,6 +84,7 @@ export default {
   },
   data() {
     return {
+      searching: false,
       searchString: '',
       selected: [],
       dropdownVisible: false,
@@ -137,10 +141,10 @@ export default {
         this.toTop(this.$refs.dropdown);
     },
     getActive(option) {
-      return (this.selected.length && this.selected.includes(option.name)) ? 'search-input__dropdown-item_active' : '';
+      return (this.selected.length && this.selected.includes(option.name)) ? 'lav-select__dropdown-item_active' : '';
     },
     getHovered(option) {
-      return (this.cursor === option) ? 'search-input__dropdown-item_hovered' : '';
+      return (this.cursor === option) ? 'lav-select__dropdown-item_hovered' : '';
     },
     showDropdown() {
       this.dropdownVisible = true;
@@ -200,63 +204,28 @@ export default {
 </script>
 
 <style lang="css">
-.search-input {
+.lav-select {
   position: relative;
-  display: block;
-  width: 100%;
-}
-.search-input__cleaner {
-  position: absolute;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 38px;
-  cursor: pointer;
-  z-index: 20;
-  top: 0;
-  right: 0;
-  color: #fff;
-  background-color: #37ACDF;
-  border-radius: 0 3px 3px 0;
-  overflow: hidden;
-}
-.search-input__cleaner-icon {
-  height: 16px;
-  width: 16px;
-  padding: 2px;
-  fill: #fff;
-}
-.search-input__value {
-  background-color: #fff;
-  text-align: left;
-  display: block;
-  outline: none;
   width: 100%;
-  font-size: 14px;
-  padding: 0.375rem 2.975rem 0.375rem 0.75rem;
-  color: #BFBFBF;
-  border: 2px solid #E0E0E0;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-.search-input__search {
+.lav-select-search {
   position: relative;
   box-shadow: 0 1px 3px rgba(0,0,0, .1);
 }
-.search-input__search-field {
+.lav-select-search-field {
   width: 100%;
   border: none;
   padding: 0.375rem 2.975rem 0.375rem 0.75rem;
   outline: none;
 }
-.search-input__search-field::placeholder {
+.lav-select-search-field::placeholder {
   font-size: 14px;
 }
-.search-input__search-field:focus {
+.lav-select-search-field:focus {
   box-shadow: 0;
 }
-.search-input__selected {
+.lav-select-selected {
   position: relative;
   z-index: 100;
   background: rgba(0,0,0,.5);
@@ -267,49 +236,47 @@ export default {
   color: rgb(255, 255, 255);
   cursor: pointer;
 }
-.search-input__selected-remove {
+.lav-select-selected-remove {
   height: 10px;
   width: 10px;
 }
-.search-input__selected-icon {
+.lav-select-selected-icon {
   fill: #fff;
   width: 10px;
   height: 10px;
 }
-.search-input__dropdown {
+.lav-select-dropdown {
   position: absolute;
   width: 100%;
+  top: 100%;
   left: 0;
   z-index: 10;
-}
-.search-input__dropdown-list {
-  width: 100%;
   overflow-y: auto;
   max-height: 200px;
 }
-.search-input__dropdown-item {
+.lav-select-dropdown-item {
   background: #fff;
   padding: 10px;
   border-bottom: 1px solid #f5f5f5;
   font-size: 14px;
   cursor: pointer;
 }
-.search-input__dropdown-item_hovered {
+.lav-select-dropdown-item_hovered {
   background: #f5f5f5;
   border-bottom: 1px solid #fff;
 }
-.search-input__dropdown-item_active {
+.lav-select-dropdown-item_active {
   background: #f5f5f5;
   border-bottom: 1px solid #fff;
   font-weight: bold;
 }
 
 
-/* .fade-enter-active, .fade-leave-active {
+.fade-enter-active, .fade-leave-active {
   transition: .2s ease-in-out;
 }
 .fade-enter, .fade-leave-to {
   transform: translateY(20px);
   opacity: 0;
-} */
+}
 </style>

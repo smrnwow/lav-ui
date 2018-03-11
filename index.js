@@ -6,12 +6,11 @@ import lavCheckbox from './components/checkbox/index.vue';
 import lavDivider from './components/divider/index.vue';
 import lavDropdown from './components/dropdown/index.vue';
 import lavFileInput from './components/file-input/index.vue';
-import lavGallery from './components/gallery/index.vue';
+import lavGallery from './components/gallery/gallery.vue';
 import lavGrid from './components/images-grid/index.vue';
 import lavInfinityScroll from './components/infinity-scroll/index.vue';
 import lavInput from './components/input/index.vue';
-import lavModal from './components/modal/index.vue';
-import lavNotification from './components/notification/index.js'; 
+import lavModal from './components/modal/modal.vue';
 import lavPagination from './components/pagination/index.vue';
 import lavProgress from './components/progress/index.vue';
 import lavRadio from './components/radio/index.vue';
@@ -26,11 +25,13 @@ import lavContainer from './components/layout/container/index.vue';
 import lavSidebar from './components/layout/sidebar/index.vue';
 import lavContent from './components/layout/content/index.vue';
 
+import progressController from './components/progress/index.js';
+import modalController from './components/modal/index.js';
+import galleryController from './components/gallery/index.js';
+import notificationController from './components/notification/index.js'; 
 
-
-console.log(lavGallery);
-
-
+//directives
+import lavRipple from './directives/ripple/index.js';
 
 
 
@@ -48,7 +49,7 @@ const LavUI = {
     lavInfinityScroll,
     lavInput,
     lavModal,
-    lavNotification,
+    notificationController,
     lavPagination,
     lavProgress,
     lavRadio,
@@ -83,6 +84,7 @@ const LavUI = {
         Vue.component('lav-select', lavSelect);
         Vue.component('lav-tabs', lavTabs);
         Vue.component('lav-tab', lavTab);
+        Vue.component('lav-tag', lavTag);
         Vue.component('lav-textarea', lavTextarea);
         Vue.component('lav-upper', lavUpper);
 
@@ -90,12 +92,13 @@ const LavUI = {
         Vue.component('lav-sidebar', lavSidebar);
         Vue.component('lav-content', lavContent);
         
+        Vue.directive('lav-ripple', lavRipple);
         
-        // Vue.component('lav-notification', lavNotification);
         
-        
-        Vue.prototype.$lavGallery = lavGallery.methods;
-        Vue.prototype.$lavNotify = lavNotification;
+        Vue.prototype.$lavGallery = galleryController;
+        Vue.prototype.$lavNotify = notificationController;
+        Vue.prototype.$lavProgress = progressController;
+        Vue.prototype.$lavModal = modalController;
     }
 };
 
@@ -119,7 +122,7 @@ export { lavGrid };
 export { lavInfinityScroll };
 export { lavInput };
 export { lavModal };
-export { lavNotification };
+export { notificationController };
 export { lavPagination };
 export { lavProgress };
 export { lavRadio };
@@ -133,3 +136,4 @@ export { lavUpper };
 export { lavContainer };
 export { lavSidebar };
 export { lavContent };
+

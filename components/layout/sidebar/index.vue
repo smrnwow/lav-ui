@@ -11,9 +11,10 @@ export default {
 </script>
 <style scoped>
 .sidebar {
-    flex-grow: 1;
-    overflow-y: auto;
-    /* width: 20%; */
-    padding: 10px;
+  position: fixed;
+  width: 15%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 10px;
 }
 </style>

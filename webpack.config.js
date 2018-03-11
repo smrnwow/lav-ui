@@ -34,8 +34,7 @@ module.exports = {
 	},
 	plugins: [
 		new webpack.ProvidePlugin({
-      Vue: ['vue/dist/vue.esm.js', 'default'],
-			axios: 'axios'
+      Vue: ['vue/dist/vue.esm.js', 'default']
 		})
 		// new webpack.DefinePlugin({
 		// 	"process.env": {
@@ -58,8 +57,7 @@ module.exports = {
 	resolve: {
 		modules: ['node_modules'],
 		alias: {
-			'vue$': 'vue/dist/vue.esm.js',
-			'@components': path.resolve(__dirname, 'components/')
+			'vue$': 'vue/dist/vue.esm.js'
 		}
 	}
 }

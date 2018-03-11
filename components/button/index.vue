@@ -1,59 +1,115 @@
 <template lang="html">
-  <button class="bf" @click="handler">
-    <span v-if="!loading"><slot></slot></span>
-    <svg class="ska" v-if="loading" viewBox='0 0 150 50'>
-      <rect x='0' y='0' height='50' width='150' fill='none' stroke='#fff' stroke-width='5' stroke-linecap='round'
-        stroke-dasharray='50 350' stroke-dashoffset='0'>
-      </rect>
-    </svg>
+  <button v-lav-ripple :style="styles" class="lav-button" @click="handler">
+    <span class="lav-button-icon" v-if="hasIcon">
+      <slot name="icon"></slot>
+    </span>
+    <span class="lav-button-body">
+      <slot></slot>
+    </span>
   </button>
 </template>
 
 <script>
+import Color from 'color';
+import lavRipple from '../../directives/ripple/index.js';
 export default {
+  directives: {
+    lavRipple
+  },
+  props: {
+    color: {
+      type: String,
+      default: '#0286c2'
+    },
+    autocolor: {
+      type: Boolean,
+      default: true
+    },
+    plain: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       loading: false
     }
   },
-  props: {
-    type: {
-      type: String,
-      default: 'button'
+  computed: {
+    styles() {
+      return this.plain ? this.plainStyles : this.normalStyles;
+    },
+    normalStyles() {
+      return {
+        backgroundColor: this.autocolor ? this.setColor(this.color) : this.color,
+        color: this.autocolor ? this.color : this.chooseColor,
+        fill: this.autocolor ? this.color : this.chooseColor
+      }
+    },
+    plainStyles() {
+      return {
+        color: this.color,
+        fill: this.color
+      }
+    },
+    hasIcon() {
+      return typeof this.$slots.icon !== 'undefined';
+    },
+    chooseColor() {
+      return Color(this.color).isDark() ? '#fff' : '#000';
     }
   },
   methods: {
+    setColor(clr) {
+      return Color(clr).alpha(0.3).rgb().string();
+    },
     handler(e) {
       this.$emit('click', e);
-      // this.loading = !this.loading;
+      this.loading = !this.loading;
     }
   }
 }
 </script>
 <style lang="css">
 
-.bf {
+.lav-button {
   position: relative;
-  height: 50px;
-  width: 150px;
-  background: rgb(2, 134, 194);
   border: none;
-  padding: 0;
+  background-color: transparent;
   outline: none;
   color: #fff;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
 }
-.ska {
+.lav-button:hover {
+  background-color: var(--button-hover-bg-color);
+}
+.lav-button-body {
+  padding: 10px 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.lav-button-icon {
+  margin-left: 10px;
+  height: 15px;
+  width: 15px;
+}
+.lav-button-loader {
   position: absolute;
+  height: 30px!important;
+  width: 30px!important;
   top: 0;
   left: 0;
 }
-.ska rect {
-  animation: zalupa 1.5s infinite linear;
+.lav-button-loader rect {
+  animation: flip 1.5s infinite linear;
 }
-
-@keyframes zalupa {
+@keyframes flip {
   to {
-    stroke-dashoffset: -400;
+    stroke-dashoffset: -120;
   }
 }
 </style>

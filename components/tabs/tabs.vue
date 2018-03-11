@@ -63,7 +63,7 @@ export default {
     tabsStyles() {
       return {
         width: this.horizontal ? '100%' : 'auto',
-        height: this.vertical ? '100%' : 'auto',
+        height: 'auto',
         flexDirection: this.horizontal ? 'row' : 'column'
       }
     },

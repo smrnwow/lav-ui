@@ -15,6 +15,7 @@
   "author": "hooleynet",
   "license": "ISC",
   "dependencies": {
+    "color": "^3.0.0",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1"
   },
