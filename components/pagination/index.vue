@@ -41,22 +41,6 @@ export default {
     count: {
       type: Number
     },
-    type: {
-      type: String,
-      default: 'post'
-    },
-    loaderPosition: {
-      type: String,
-      default: ''
-    },
-    loaderSize: {
-      type: String,
-      default: ''
-    },
-    cols: {
-      type: Object,
-      default: () => ({ default: 2 })
-    },
     noDataText: {
       type: String,
       default: '<div class="no-data text-muted">Ничего не найдено</div>'

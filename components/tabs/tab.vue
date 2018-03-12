@@ -1,14 +1,12 @@
 <template lang="html">
-  <div class="tab" @click="handle">
+  <div class="lav-tab" @click="handle">
     <slot></slot>
   </div>
 </template>
 
 <script>
+import bus from '../../helpers/bus.js';
 export default {
-  props: {
-    index: [String, Number]
-  },
   methods: {
     handle() {
       this.$nextTick(() => {
@@ -22,7 +20,7 @@ export default {
           height: this.$el.getBoundingClientRect().height + 'px',
           top: (this.$el.getBoundingClientRect().top - offset.top) + 'px'
         };
-        this.$parent.$emit('change-tab', { data, index: this.index })
+        bus.$emit('lav-tab-change', { data })
       })
     }
   }

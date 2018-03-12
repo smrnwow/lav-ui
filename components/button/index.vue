@@ -1,5 +1,5 @@
 <template lang="html">
-  <button v-lav-ripple :style="styles" class="lav-button" @click="handler">
+  <button v-lav-ripple="rippleColor" :style="styles" class="lav-button" @click="handler">
     <span class="lav-button-icon" v-if="hasIcon">
       <slot name="icon"></slot>
     </span>
@@ -10,12 +10,13 @@
 </template>
 
 <script>
-import Color from 'color';
+import colorMixin from '../../mixins/color/index.js';
 import lavRipple from '../../directives/ripple/index.js';
 export default {
   directives: {
     lavRipple
   },
+  mixins: [colorMixin],
   props: {
     color: {
       type: String,
@@ -36,14 +37,17 @@ export default {
     }
   },
   computed: {
+    rippleColor() {
+      return (this.autocolor || this.plain) ? this.setColor(this.color) : 'rgba(255, 255, 255, .3)';
+    },
     styles() {
       return this.plain ? this.plainStyles : this.normalStyles;
     },
     normalStyles() {
       return {
         backgroundColor: this.autocolor ? this.setColor(this.color) : this.color,
-        color: this.autocolor ? this.color : this.chooseColor,
-        fill: this.autocolor ? this.color : this.chooseColor
+        color: this.autocolor ? this.color : this.chooseColor(this.color),
+        fill: this.autocolor ? this.color : this.chooseColor(this.color)
       }
     },
     plainStyles() {
@@ -54,15 +58,9 @@ export default {
     },
     hasIcon() {
       return typeof this.$slots.icon !== 'undefined';
-    },
-    chooseColor() {
-      return Color(this.color).isDark() ? '#fff' : '#000';
     }
   },
   methods: {
-    setColor(clr) {
-      return Color(clr).alpha(0.3).rgb().string();
-    },
     handler(e) {
       this.$emit('click', e);
       this.loading = !this.loading;

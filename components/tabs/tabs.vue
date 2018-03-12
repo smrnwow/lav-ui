@@ -1,13 +1,18 @@
 <template lang="html">
-  <div class="tabs" :style="[tabsStyles]">
+  <div class="lav-tabs" :style="[tabsStyles]">
     <slot></slot>
-    <div class="tabs__line" :style="[lineStyles]"></div>
+    <div class="lav-tabs-line" :style="[lineStyles]"></div>
   </div>
 </template>
 
 <script>
+import bus from '../../helpers/bus.js';
 export default {
   props: {
+    tabs: {
+      type: Array,
+      default: () => ([])
+    },
     direction: {
       type: String,
       default: 'horizontal'
@@ -26,7 +31,7 @@ export default {
   mounted() {
     this.calcSizeLine();
     window.addEventListener('resize', this.calcSizeLine);
-    this.$on('change-tab', ({ data, index }) => {
+    bus.$on('lav-tab-change', ({ data, index }) => {
       this.line = data;
     });
   },
@@ -81,14 +86,14 @@ export default {
 </script>
 
 <style lang="css">
-.tabs {
+.lav-tabs {
     position: relative;
     display: flex;
     align-items: center;
-    /* background-color: #007FB2; */
+    background-color: #007FB2;
     border-radius: 5px;
 }
-.tab {
+.lav-tab {
     position: relative;
     display: flex;
     align-items: center;
@@ -97,8 +102,9 @@ export default {
     justify-content: flex-start;
     width: 100%;
     color: #fff;
+    padding: 10px;
 }
-.tabs__line {
+.lav-tabs-line {
     position: absolute;
     bottom: 0;
     height: 4px;

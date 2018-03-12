@@ -17,6 +17,10 @@ export default {
       type: Boolean,
       default: false
     },
+    after: {
+      type: Boolean,
+      default: false
+    },
     placeholder: String
   },
   computed: {
@@ -27,7 +31,8 @@ export default {
       switch(this.type) {
         case 'text':
           return {
-            placeholder: this.placeholder
+            placeholder: this.placeholder,
+            after: this.after
           }
         case 'password': 
           return {

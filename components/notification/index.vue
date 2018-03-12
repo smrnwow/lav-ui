@@ -106,11 +106,11 @@ export default {
 .notif-leave-active {
   transition: .2s ease-in-out;
 }
+.notif-enter {
+  opacity: 0;  
+}
 .notif-leave-to {
   transform: translateX(20px);
-  opacity: 0;
-}
-.notif-enter {
   opacity: 0;
 }
 </style>

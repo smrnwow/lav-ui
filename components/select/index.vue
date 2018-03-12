@@ -1,9 +1,9 @@
 <template lang="html">
   <label class="lav-label" ref="wrap">
     <span class="lav-input-wrap">
-      <span v-if="multiply && selected.length">
-        <small class="lav-select-selected" v-for="(item, i) in selected" @click.stop="removeSelected(i)" :key="i">
-          {{ item }}
+      <span v-if="multiple && selected.length" class="lav-select-selected-wrap">
+        <span class="lav-select-selected" v-for="(item, i) in selected" @click.stop="removeSelected(i)" :key="item.name">
+          {{ item.name }}
           <span class="lav-select-selected-remove">
             <svg class="lav-select-selected-icon" x="0px" y="0px" viewBox="0 0 21.9 21.9">
               <path d="M14.1,11.3c-0.2-0.2-0.2-0.5,0-0.7l7.5-7.5c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7l-1.4-1.4C20,0.1,19.7,0,19.5,0
@@ -12,11 +12,12 @@
               s-0.1-0.5-0.3-0.7L14.1,11.3z"/>
             </svg>
           </span>
-        </small>
+        </span>
       </span>
-      <button v-if="!searching" class="lav-input" type="button" @focus="startSearching">
+      <button v-if="!searching || !searchable" class="lav-input" ref="button" @click="startSearching"
+        @keydown.down="scrollDropdown" @keydown.up="scrollDropdown" @keydown.enter="keyBoardSelect">
         <span v-if="!selected.length">{{ placeholder }}</span>
-        <span v-if="!multiply && selected.length">{{ selected[0] }}</span>
+        <span v-if="!multiple && selected.length">{{ selected[0].name }}</span>
       </button>
       <input v-if="searchable && searching" class="lav-input" tabindex type="text" v-model="searchString" @input="search" placeholder="Поиск"
         @keydown.down="scrollDropdown" @keydown.up="scrollDropdown" @keydown.enter="keyBoardSelect" ref="searchInput" />
@@ -28,7 +29,7 @@
       </span>
     </span>
     <span class="lav-input-after">
-      <svg class="lav-icon" x="0px" y="0px" viewBox="0 0 459 459">
+      <svg class="lav-icon" :class="{ 'lav-icon-rotate': dropdownVisible }" x="0px" y="0px" viewBox="0 0 300 300">
         <path d="M282.082,76.511l-14.274-14.273c-1.902-1.906-4.093-2.856-6.57-2.856c-2.471,0-4.661,0.95-6.563,2.856L142.466,174.441
           L30.262,62.241c-1.903-1.906-4.093-2.856-6.567-2.856c-2.475,0-4.665,0.95-6.567,2.856L2.856,76.515C0.95,78.417,0,80.607,0,83.082
           c0,2.473,0.953,4.663,2.856,6.565l133.043,133.046c1.902,1.903,4.093,2.854,6.567,2.854s4.661-0.951,6.562-2.854L282.082,89.647
@@ -50,7 +51,7 @@
 <script>
 export default {
   props: {
-    multiply: {
+    multiple: {
       type: Boolean,
       default: false
     },
@@ -60,7 +61,7 @@ export default {
     },
     searchable: {
       type: Boolean,
-      default: true
+      default: false
     },
     options: {
       type: Array,
@@ -100,9 +101,15 @@ export default {
   },
   methods: {
     search(e) {
-      this.searchAction(this.searchString).then(res => {
-        this.filteredOptions = (res && res.items) ? res.items : [];
-      });
+      if(this.searchAction) {
+        this.searchAction(this.searchString).then(res => {
+          this.filteredOptions = (res && res.items) ? res.items : [];
+        });
+      } else {
+        this.filteredOptions = this.options.filter(item => {
+          return item.name.match(new RegExp(this.searchString, 'ig'))
+        })
+      }
     },
     inputBlur(e) {
       if(!this.$refs.wrap.contains(e.target)) this.stopSearching();
@@ -111,8 +118,8 @@ export default {
       this.cursor = index;
     },
     select(item, index) {
-      if(!this.multiply) this.selected = [];
-      this.selected.push(item.name);
+      if(!this.multiple) this.selected = [];
+      if(!this.selected.includes(item)) this.selected.push(item);
       this.$emit('select', this.selected);
       this.setCursor(index);
       this.stopSearching();
@@ -128,23 +135,25 @@ export default {
       this.filteredOptions = [];
     },
     startSearching() {
+      this.searching = true;
       this.showDropdown();
       this.$nextTick(() => this.focusOnInput());
     },
     stopSearching() {
+      this.searching = false;
       this.$nextTick(() => this.hideDropdown());
     },
     scrollDropdown(e) {
       if(e.keyCode === 40 && this.cursor < this.getOptions.length - 1)
         this.toBottom(this.$refs.dropdown);
-      else if(e.keyCode === 38 && this.cursor >= 0)
+      else if(e.keyCode === 38 && this.cursor > 0)
         this.toTop(this.$refs.dropdown);
     },
     getActive(option) {
-      return (this.selected.length && this.selected.includes(option.name)) ? 'lav-select__dropdown-item_active' : '';
+      return (this.selected.length && this.selected.includes(option)) ? 'lav-select-dropdown-item_active' : '';
     },
     getHovered(option) {
-      return (this.cursor === option) ? 'lav-select__dropdown-item_hovered' : '';
+      return (this.cursor === option) ? 'lav-select-dropdown-item_hovered' : '';
     },
     showDropdown() {
       this.dropdownVisible = true;
@@ -153,7 +162,7 @@ export default {
       this.dropdownVisible = false;
     },
     focusOnInput() {
-      if(this.searchable) this.$refs.searchInput.focus();
+      this.searchable ? this.$refs.searchInput.focus() : this.$refs.button.focus();
     },
     toBottom(list) {
       this.cursor++;
@@ -202,81 +211,3 @@ export default {
   }
 }
 </script>
-
-<style lang="css">
-.lav-select {
-  position: relative;
-  display: flex;
-  width: 100%;
-}
-.lav-select-search {
-  position: relative;
-  box-shadow: 0 1px 3px rgba(0,0,0, .1);
-}
-.lav-select-search-field {
-  width: 100%;
-  border: none;
-  padding: 0.375rem 2.975rem 0.375rem 0.75rem;
-  outline: none;
-}
-.lav-select-search-field::placeholder {
-  font-size: 14px;
-}
-.lav-select-search-field:focus {
-  box-shadow: 0;
-}
-.lav-select-selected {
-  position: relative;
-  z-index: 100;
-  background: rgba(0,0,0,.5);
-  border-radius: 5px;
-  padding: 3px;
-  margin: 0 3px 5px 0;
-  font-size: 11px;
-  color: rgb(255, 255, 255);
-  cursor: pointer;
-}
-.lav-select-selected-remove {
-  height: 10px;
-  width: 10px;
-}
-.lav-select-selected-icon {
-  fill: #fff;
-  width: 10px;
-  height: 10px;
-}
-.lav-select-dropdown {
-  position: absolute;
-  width: 100%;
-  top: 100%;
-  left: 0;
-  z-index: 10;
-  overflow-y: auto;
-  max-height: 200px;
-}
-.lav-select-dropdown-item {
-  background: #fff;
-  padding: 10px;
-  border-bottom: 1px solid #f5f5f5;
-  font-size: 14px;
-  cursor: pointer;
-}
-.lav-select-dropdown-item_hovered {
-  background: #f5f5f5;
-  border-bottom: 1px solid #fff;
-}
-.lav-select-dropdown-item_active {
-  background: #f5f5f5;
-  border-bottom: 1px solid #fff;
-  font-weight: bold;
-}
-
-
-.fade-enter-active, .fade-leave-active {
-  transition: .2s ease-in-out;
-}
-.fade-enter, .fade-leave-to {
-  transform: translateY(20px);
-  opacity: 0;
-}
-</style>

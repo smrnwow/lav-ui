@@ -10,6 +10,7 @@ export default {
         rippleInner.classList.add('lav-ripple-inner');
         rippleInner.style.width = rippleInner.style.height = Math.max(el.offsetWidth, el.offsetHeight) + 'px';
         el.appendChild(rippleInner);
+        rippleInner.style.backgroundColor = binding.value || 'rgba(255, 255, 255, .3)';
       }
       rippleInner.style.left = (e.offsetX - rippleInner.offsetWidth / 2) + 'px';
       rippleInner.style.top = (e.offsetY - rippleInner.offsetHeight / 2) + 'px';
