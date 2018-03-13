@@ -2,10 +2,12 @@ let path = require('path');
 let webpack = require('webpack');
 
 module.exports = {
-	entry: './index.js',
+	entry: './src/index.js',
 	output: {
-		filename: 'bundle.js',
-		path: path.resolve(__dirname, 'build')
+		filename: 'index.js',
+		path: path.resolve(__dirname, 'build'),
+		library: 'library',
+		libraryTarget: 'umd'
 	},
 	module: {
 		rules: [
@@ -55,7 +57,7 @@ module.exports = {
 		port: 8081
 	},
 	resolve: {
-		modules: ['node_modules'],
+		extensions: ['.js', '.vue'],
 		alias: {
 			'vue$': 'vue/dist/vue.esm.js'
 		}

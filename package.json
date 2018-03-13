@@ -2,7 +2,7 @@
   "name": "lav-ui",
   "version": "1.0.2",
   "description": "Another one ui lib",
-  "main": "build/bundle.js",
+  "main": "build/index.js",
   "scripts": {
     "start": "webpack-dev-server --progress",
     "build": "webpack --progress",
