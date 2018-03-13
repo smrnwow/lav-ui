@@ -15259,14 +15259,7 @@ var LavUI = {
     }
 };
 
-// Automatically install Keen UI if Vue is available globally
-
-
 //directives
-if (typeof window !== 'undefined' && window.Vue) {
-    window.Vue.use(LavUI);
-}
-
 exports.default = LavUI;
 exports.lavAvatar = _index2.default;
 exports.lavBreadcrumbs = _index4.default;

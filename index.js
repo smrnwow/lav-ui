@@ -102,11 +102,6 @@ const LavUI = {
     }
 };
 
-// Automatically install Keen UI if Vue is available globally
-if (typeof window !== 'undefined' && window.Vue) {
-    window.Vue.use(LavUI);
-}
-
 export default LavUI;
 
 export { lavAvatar };
