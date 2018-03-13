@@ -1,13 +1,13 @@
 {
-  "name": "LavUI",
+  "name": "lav-ui",
   "version": "1.0.0",
   "description": "Another one ui lib",
-  "main": "index.js",
+  "main": "./build/bundle.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server --progress",
+    "build": "webpack --progress",
     "flow": "flow"
   },
-  "homepage": "https://hooleynet.github.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/lavinge/lav-ui.git"
