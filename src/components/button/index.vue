@@ -47,13 +47,15 @@ export default {
       return {
         backgroundColor: this.autocolor ? this.setColor(this.color) : this.color,
         color: this.autocolor ? this.color : this.chooseColor(this.color),
-        fill: this.autocolor ? this.color : this.chooseColor(this.color)
+        fill: this.autocolor ? this.color : this.chooseColor(this.color),
+        boxShadow: `0 7px 14px ${this.setColor(this.color)}, 0 3px 6px ${this.setColor(this.color)}`
       }
     },
     plainStyles() {
       return {
         color: this.color,
-        fill: this.color
+        fill: this.color,
+        boxShadow: '0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08)'
       }
     },
     hasIcon() {
@@ -68,46 +70,3 @@ export default {
   }
 }
 </script>
-<style lang="css">
-
-.lav-button {
-  position: relative;
-  border: none;
-  background-color: transparent;
-  outline: none;
-  color: #fff;
-  border-radius: 5px;
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
-}
-.lav-button:hover {
-  background-color: var(--button-hover-bg-color);
-}
-.lav-button-body {
-  padding: 10px 10px;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.lav-button-icon {
-  margin-left: 10px;
-  height: 15px;
-  width: 15px;
-}
-.lav-button-loader {
-  position: absolute;
-  height: 30px!important;
-  width: 30px!important;
-  top: 0;
-  left: 0;
-}
-.lav-button-loader rect {
-  animation: flip 1.5s infinite linear;
-}
-@keyframes flip {
-  to {
-    stroke-dashoffset: -120;
-  }
-}
-</style>

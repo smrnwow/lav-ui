@@ -1,6 +1,6 @@
 export default {
   bind(el, binding, vnode) {
-    el.addEventListener('click', e => {
+    el.addEventListener('mousedown', e => {
       el.classList.add('lav-ripple');
       let rippleInner = el.querySelector('.lav-ripple-inner');
       if(rippleInner) {
@@ -13,7 +13,7 @@ export default {
         rippleInner.style.backgroundColor = binding.value || 'rgba(255, 255, 255, .3)';
       }
       rippleInner.style.left = (e.offsetX - rippleInner.offsetWidth / 2) + 'px';
-      rippleInner.style.top = (e.offsetY - rippleInner.offsetHeight / 2) + 'px';
+      rippleInner.style.top = (e.offsetY - rippleInner.offsetHeight / 2) + 'px';      
       rippleInner.classList.add('lav-ripple-animate');
     });
   }

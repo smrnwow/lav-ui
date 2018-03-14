@@ -1,21 +1,21 @@
 <template lang="html">
   <label class="lav-label" ref="wrap">
     <span class="lav-input-wrap">
-      <span v-if="multiple && selected.length" class="lav-select-selected-wrap">
-        <span class="lav-select-selected" v-for="(item, i) in selected" @click.stop="removeSelected(i)" :key="item.name">
-          {{ item.name }}
-          <span class="lav-select-selected-remove">
-            <svg class="lav-select-selected-icon" x="0px" y="0px" viewBox="0 0 21.9 21.9">
-              <path d="M14.1,11.3c-0.2-0.2-0.2-0.5,0-0.7l7.5-7.5c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7l-1.4-1.4C20,0.1,19.7,0,19.5,0
-              c-0.3,0-0.5,0.1-0.7,0.3l-7.5,7.5c-0.2,0.2-0.5,0.2-0.7,0L3.1,0.3C2.9,0.1,2.6,0,2.4,0S1.9,0.1,1.7,0.3L0.3,1.7C0.1,1.9,0,2.2,0,2.4 s0.1,0.5,0.3,0.7l7.5,7.5c0.2,0.2,0.2,0.5,0,0.7l-7.5,7.5C0.1,19,0,19.3,0,19.5s0.1,0.5,0.3,0.7l1.4,1.4c0.2,0.2,0.5,0.3,0.7,0.3
-              s0.5-0.1,0.7-0.3l7.5-7.5c0.2-0.2,0.5-0.2,0.7,0l7.5,7.5c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l1.4-1.4c0.2-0.2,0.3-0.5,0.3-0.7
-              s-0.1-0.5-0.3-0.7L14.1,11.3z"/>
-            </svg>
-          </span>
-        </span>
-      </span>
       <button v-if="!searching || !searchable" class="lav-input" ref="button" @click="startSearching"
         @keydown.down="scrollDropdown" @keydown.up="scrollDropdown" @keydown.enter="keyBoardSelect">
+        <span v-if="multiple && selected.length" class="lav-select-selected-wrap">
+          <span class="lav-select-selected" v-for="(item, i) in selected" @click.stop="removeSelected(i)" :key="item.name">
+            {{ item.name }}
+            <span class="lav-select-selected-remove">
+              <svg class="lav-select-selected-icon" x="0px" y="0px" viewBox="0 0 21.9 21.9">
+                <path d="M14.1,11.3c-0.2-0.2-0.2-0.5,0-0.7l7.5-7.5c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7l-1.4-1.4C20,0.1,19.7,0,19.5,0
+                c-0.3,0-0.5,0.1-0.7,0.3l-7.5,7.5c-0.2,0.2-0.5,0.2-0.7,0L3.1,0.3C2.9,0.1,2.6,0,2.4,0S1.9,0.1,1.7,0.3L0.3,1.7C0.1,1.9,0,2.2,0,2.4 s0.1,0.5,0.3,0.7l7.5,7.5c0.2,0.2,0.2,0.5,0,0.7l-7.5,7.5C0.1,19,0,19.3,0,19.5s0.1,0.5,0.3,0.7l1.4,1.4c0.2,0.2,0.5,0.3,0.7,0.3
+                s0.5-0.1,0.7-0.3l7.5-7.5c0.2-0.2,0.5-0.2,0.7,0l7.5,7.5c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l1.4-1.4c0.2-0.2,0.3-0.5,0.3-0.7
+                s-0.1-0.5-0.3-0.7L14.1,11.3z"/>
+              </svg>
+            </span>
+          </span>
+        </span>
         <span v-if="!selected.length">{{ placeholder }}</span>
         <span v-if="!multiple && selected.length">{{ selected[0].name }}</span>
       </button>
@@ -120,7 +120,13 @@ export default {
     select(item, index) {
       if(!this.multiple) this.selected = [];
       if(!this.selected.includes(item)) this.selected.push(item);
-      this.$emit('select', this.selected);
+      if(this.multiple) {
+        this.$emit('input', this.selected);
+        this.$emit('select', this.selected);
+      } else {
+        this.$emit('input', this.selected[0]);
+        this.$emit('select', this.selected[0]);
+      }
       this.setCursor(index);
       this.stopSearching();
     },
@@ -129,6 +135,7 @@ export default {
     },
     clearInput() {
       this.selected = [];
+      this.$emit('input', this.selected);
       this.$emit('select', this.selected);
       this.setCursor(0);
       this.searchString = '';
