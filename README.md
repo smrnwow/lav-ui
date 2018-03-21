@@ -14,4 +14,5 @@
 + add pagination component
 + add tooltip component
 + ~~norm icons component~~
++ ~~add modal component~~
 + add layout components

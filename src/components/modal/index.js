@@ -1,11 +1,11 @@
 import bus from '../../helpers/bus.js';
 
 const modal = {
-  open() {
-    bus.$emit('lav-modal-open');
+  open(name) {
+    bus.$emit('lav-modal-open', name);
   },
-  close() {
-    bus.$emit('lav-modal-close');
+  close(name) {
+    bus.$emit('lav-modal-close', name);
   }
 }
 
