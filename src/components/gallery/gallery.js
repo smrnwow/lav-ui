@@ -1,7 +1,8 @@
+import lavIcon from '../icon';
 import thumbs from './thumbs.vue';
 import bus from '../../helpers/bus.js';
 export default {
-  components: { thumbs },
+  components: { thumbs, lavIcon },
   props: {
     images: {
       type: Array,

@@ -7,12 +7,7 @@
           <span class="lav-select-selected" v-for="(item, i) in selected" @click.stop="removeSelected(i)" :key="item.name">
             {{ item.name }}
             <span class="lav-select-selected-remove">
-              <svg class="lav-select-selected-icon" x="0px" y="0px" viewBox="0 0 21.9 21.9">
-                <path d="M14.1,11.3c-0.2-0.2-0.2-0.5,0-0.7l7.5-7.5c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7l-1.4-1.4C20,0.1,19.7,0,19.5,0
-                c-0.3,0-0.5,0.1-0.7,0.3l-7.5,7.5c-0.2,0.2-0.5,0.2-0.7,0L3.1,0.3C2.9,0.1,2.6,0,2.4,0S1.9,0.1,1.7,0.3L0.3,1.7C0.1,1.9,0,2.2,0,2.4 s0.1,0.5,0.3,0.7l7.5,7.5c0.2,0.2,0.2,0.5,0,0.7l-7.5,7.5C0.1,19,0,19.3,0,19.5s0.1,0.5,0.3,0.7l1.4,1.4c0.2,0.2,0.5,0.3,0.7,0.3
-                s0.5-0.1,0.7-0.3l7.5-7.5c0.2-0.2,0.5-0.2,0.7,0l7.5,7.5c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l1.4-1.4c0.2-0.2,0.3-0.5,0.3-0.7
-                s-0.1-0.5-0.3-0.7L14.1,11.3z"/>
-              </svg>
+              <lav-icon icon-name="close" :height="7" :width="7" color="#fff" />
             </span>
           </span>
         </span>
@@ -22,19 +17,11 @@
       <input v-if="searchable && searching" class="lav-input" tabindex type="text" v-model="searchString" @input="search" placeholder="Поиск"
         @keydown.down="scrollDropdown" @keydown.up="scrollDropdown" @keydown.enter="keyBoardSelect" ref="searchInput" />
       <span v-if="cleanerVisible" class="lav-input-cleaner" @click="clearInput">
-        <svg class="lav-icon" x="0px" y="0px" viewBox="0 0 21.9 21.9">
-          <path d="M14.1,11.3c-0.2-0.2-0.2-0.5,0-0.7l7.5-7.5c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7l-1.4-1.4C20,0.1,19.7,0,19.5,0
-          c-0.3,0-0.5,0.1-0.7,0.3l-7.5,7.5c-0.2,0.2-0.5,0.2-0.7,0L3.1,0.3C2.9,0.1,2.6,0,2.4,0S1.9,0.1,1.7,0.3L0.3,1.7C0.1,1.9,0,2.2,0,2.4s0.1,0.5,0.3,0.7l7.5,7.5c0.2,0.2,0.2,0.5,0,0.7l-7.5,7.5C0.1,19,0,19.3,0,19.5s0.1,0.5,0.3,0.7l1.4,1.4c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l7.5-7.5c0.2-0.2,0.5-0.2,0.7,0l7.5,7.5c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l1.4-1.4c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7L14.1,11.3z"/>
-        </svg>
+        <lav-icon icon-name="close" :height="9" :width="9"></lav-icon>
       </span>
     </span>
     <span class="lav-input-after">
-      <svg class="lav-icon" :class="{ 'lav-icon-rotate': dropdownVisible }" x="0px" y="0px" viewBox="0 0 300 300">
-        <path d="M282.082,76.511l-14.274-14.273c-1.902-1.906-4.093-2.856-6.57-2.856c-2.471,0-4.661,0.95-6.563,2.856L142.466,174.441
-          L30.262,62.241c-1.903-1.906-4.093-2.856-6.567-2.856c-2.475,0-4.665,0.95-6.567,2.856L2.856,76.515C0.95,78.417,0,80.607,0,83.082
-          c0,2.473,0.953,4.663,2.856,6.565l133.043,133.046c1.902,1.903,4.093,2.854,6.567,2.854s4.661-0.951,6.562-2.854L282.082,89.647
-          c1.902-1.903,2.847-4.093,2.847-6.565C284.929,80.607,283.984,78.417,282.082,76.511z"/>
-      </svg>
+      <lav-icon icon-name="arrow-down"></lav-icon>
     </span>
     <transition name="fade">
       <div v-show="dropdownVisible" class="lav-select-dropdown" ref="dropdown">
@@ -49,7 +36,9 @@
 </template>
 
 <script>
+import lavIcon from '../icon';
 export default {
+  components: { lavIcon },
   props: {
     multiple: {
       type: Boolean,
