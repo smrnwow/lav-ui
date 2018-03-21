@@ -14423,6 +14423,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _icon = __webpack_require__(4);
+
+var _icon2 = _interopRequireDefault(_icon);
+
 var _bus = __webpack_require__(3);
 
 var _bus2 = _interopRequireDefault(_bus);
@@ -14430,6 +14434,20 @@ var _bus2 = _interopRequireDefault(_bus);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+  components: { lavIcon: _icon2.default },
+  props: {
+    overlay: {
+      type: Boolean,
+      default: true
+    },
+    name: {
+      type: String
+    },
+    fullHeight: {
+      type: Boolean,
+      default: false
+    }
+  },
   data: function data() {
     return {
       visible: false
@@ -14440,9 +14458,21 @@ exports.default = {
     _bus2.default.$on('lav-modal-close', this.close);
   },
 
+  computed: {
+    overlayVisible: function overlayVisible() {
+      return this.overlay && this.visible;
+    },
+    styles: function styles() {
+      return {
+        height: this.fullHeight ? '100%' : 'auto'
+      };
+    }
+  },
   methods: {
-    open: function open() {
-      this.visible = true;
+    open: function open(name) {
+      if (this.name === name) {
+        this.visible = true;
+      }
     },
     close: function close() {
       this.visible = false;
@@ -20406,7 +20436,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.lav-modal-wrap[data-v-bfe5252a] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 100;\n  background: rgba(0,0,0,.8);\n  overflow-y: auto;\n  overflow-x: hidden;\n}\n.lav-modal[data-v-bfe5252a] {\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  max-width: 600px;\n  background-color: #fff;\n  padding: 20px;\n  z-index: 120;\n}\n.lav-modal-header[data-v-bfe5252a] {\n  position: relative;\n  display: flex;\n  justify-content: space-between;\n  padding-bottom: 20px;\n  margin-bottom: 20px;\n  border-bottom: 1px solid #ccc;\n}\n.lav-modal-close[data-v-bfe5252a] {\n  width: 15px;\n  height: 15px;\n  cursor: pointer;\n}\n.lav-modal-close svg[data-v-bfe5252a] {\n  height: 100%;\n  width: 100%;\n}\n.fade-enter-active[data-v-bfe5252a], .fade-leave-active[data-v-bfe5252a] {\n  transition: .2s ease-in-out;\n}\n.fade-enter[data-v-bfe5252a], .fade-leave-to[data-v-bfe5252a] {\n  opacity: 0;\n}\n", ""]);
+exports.push([module.i, "\n.lav-modal-overlay[data-v-bfe5252a] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 100;\n  background: rgba(0,0,0,.8);\n  overflow-y: auto;\n  overflow-x: hidden;\n}\n.lav-modal[data-v-bfe5252a] {\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  height: 100%;\n  max-width: 600px;\n  background-color: #fff;\n  /* padding: 20px; */\n  z-index: 120;\n}\n.lav-modal-inner[data-v-bfe5252a] {\n  position: relative;\n  height: 100%;\n}\n.lav-modal-header[data-v-bfe5252a] {\n  position: relative;\n  display: flex;\n  justify-content: space-between;\n  padding: 20px;\n  border-bottom: 1px solid #ccc;\n}\n.lav-modal-body[data-v-bfe5252a] {\n  height: calc(100% - 60px);\n  padding: 20px;\n  overflow-y: auto;\n}\n", ""]);
 
 // exports
 
@@ -20420,54 +20450,60 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("transition", { attrs: { name: "fade" } }, [
-    _c(
-      "div",
-      {
-        directives: [
+  return _c(
+    "div",
+    { staticClass: "lav-modal-wrap" },
+    [
+      _c("transition", { attrs: { name: "lav-fade" } }, [
+        _vm.overlayVisible
+          ? _c("div", { staticClass: "lav-modal-overlay" })
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "lav-slide-up" } }, [
+        _c(
+          "div",
           {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.visible,
-            expression: "visible"
-          }
-        ],
-        staticClass: "lav-modal-wrap"
-      },
-      [
-        _c("div", { staticClass: "lav-modal" }, [
-          _c(
-            "div",
-            { staticClass: "lav-modal-header" },
-            [
-              _vm._t("header"),
-              _vm._v(" "),
-              _c("span", { staticClass: "lav-modal-close" }, [
-                _c(
-                  "svg",
-                  {
-                    attrs: { x: "0px", y: "0px", viewBox: "0 0 21.9 21.9" },
-                    on: { click: _vm.close }
-                  },
-                  [
-                    _c("path", {
-                      attrs: {
-                        d:
-                          "M14.1,11.3c-0.2-0.2-0.2-0.5,0-0.7l7.5-7.5c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7l-1.4-1.4C20,0.1,19.7,0,19.5,0\n              c-0.3,0-0.5,0.1-0.7,0.3l-7.5,7.5c-0.2,0.2-0.5,0.2-0.7,0L3.1,0.3C2.9,0.1,2.6,0,2.4,0S1.9,0.1,1.7,0.3L0.3,1.7C0.1,1.9,0,2.2,0,2.4s0.1,0.5,0.3,0.7l7.5,7.5c0.2,0.2,0.2,0.5,0,0.7l-7.5,7.5C0.1,19,0,19.3,0,19.5s0.1,0.5,0.3,0.7l1.4,1.4c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l7.5-7.5c0.2-0.2,0.5-0.2,0.7,0l7.5,7.5c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l1.4-1.4c0.2-0.2,0.3-0.5,0.3-0.7s-0.1-0.5-0.3-0.7L14.1,11.3z"
-                      }
-                    })
-                  ]
-                )
-              ])
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.visible,
+                expression: "visible"
+              }
             ],
-            2
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "lav-modal-body" }, [_vm._t("body")], 2)
-        ])
-      ]
-    )
-  ])
+            staticClass: "lav-modal",
+            style: _vm.styles
+          },
+          [
+            _c("div", { staticClass: "lav-modal-inner" }, [
+              _c(
+                "div",
+                { staticClass: "lav-modal-header" },
+                [
+                  _vm._t("header"),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      staticClass: "lav-modal-close",
+                      on: { click: _vm.close }
+                    },
+                    [_c("lav-icon", { attrs: { "icon-name": "close" } })],
+                    1
+                  )
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "lav-modal-body" }, [_vm._t("body")], 2)
+            ])
+          ]
+        )
+      ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -22302,11 +22338,11 @@ var _bus2 = _interopRequireDefault(_bus);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var modal = {
-  open: function open() {
-    _bus2.default.$emit('lav-modal-open');
+  open: function open(name) {
+    _bus2.default.$emit('lav-modal-open', name);
   },
-  close: function close() {
-    _bus2.default.$emit('lav-modal-close');
+  close: function close(name) {
+    _bus2.default.$emit('lav-modal-close', name);
   }
 };
 
