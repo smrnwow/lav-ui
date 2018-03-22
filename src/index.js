@@ -15,6 +15,7 @@ import lavPagination from './components/pagination/index.vue';
 import lavProgress from './components/progress/index.vue';
 import lavRadio from './components/radio/index.vue';
 import lavSelect from './components/select/index.vue';
+import lavSwitch from './components/switch/index.vue';
 import lavTabs from './components/tabs/tabs.vue';
 import lavTab from './components/tabs/tab.vue';
 import lavTag from './components/tag/index.vue';
@@ -54,6 +55,7 @@ const LavUI = {
     lavProgress,
     lavRadio,
     lavSelect,
+    lavSwitch,
     lavTabs,
     lavTab,
     lavTag,
@@ -82,6 +84,7 @@ const LavUI = {
         Vue.component('lav-progress', lavProgress);
         Vue.component('lav-radio', lavRadio);
         Vue.component('lav-select', lavSelect);
+        Vue.component('lav-switch', lavSwitch);
         Vue.component('lav-tabs', lavTabs);
         Vue.component('lav-tab', lavTab);
         Vue.component('lav-tag', lavTag);
@@ -122,6 +125,7 @@ export { lavPagination };
 export { lavProgress };
 export { lavRadio };
 export { lavSelect };
+export { lavSwitch };
 export { lavTabs };
 export { lavTab };
 export { lavTag };

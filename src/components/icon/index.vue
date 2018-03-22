@@ -11,9 +11,10 @@ import arrowRight from './arrow-right';
 import pen from './pen';
 import eye from './eye';
 import heart from './heart';
+import checkMark from './check-mark';
 
 export default {
-  components: { close, arrowDown, arrowUp, arrowLeft, arrowRight, pen, eye, heart },
+  components: { close, arrowDown, arrowUp, arrowLeft, arrowRight, pen, eye, heart, checkMark },
   props: {
     iconName: String,
     height: {
