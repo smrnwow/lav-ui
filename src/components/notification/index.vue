@@ -1,5 +1,5 @@
 <template lang="html">
-  <transition name="notif">
+  <transition :name="transitionName">
     <div v-show="visible" class="notification" :class="[classes]" @click="handleClick" 
       @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
       <div class="notification__header">
@@ -7,7 +7,6 @@
       </div>
       <div class="notification__body">
         {{ text }}
-        id: {{ id }}
       </div>
     </div>
   </transition>
@@ -56,6 +55,9 @@ export default {
         `notification_${this.type}`,
         `notification_${this.position.split('-')[1]}`
       ]
+    },
+    transitionName() {
+      return `lav-slide-${this.position.split('-')[1]}`
     }
   }
 }
@@ -92,16 +94,16 @@ export default {
   padding: 30px 20px;
 }
 .notification_warn {
-  border-left: 3px solid yellow;
+  border-left: 3px solid #FFC800;
 }
 .notification_info {
-  border-left: 3px solid blue;
+  border-left: 3px solid #3FB6DC;
 }
 .notification_success {
-  border-left: 3px solid green;
+  border-left: 3px solid #2DC76D;
 }
 .notification_alert {
-  border-left: 3px solid red;
+  border-left: 3px solid #FF7052;
 }
 .notif-leave-active {
   transition: .2s ease-in-out;
