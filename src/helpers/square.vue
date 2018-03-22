@@ -36,7 +36,7 @@ export default {
       return {
         width: this.size,
         height: this.size,
-        padding: '0 5px',
+        margin: '0 5px',
         display: 'inline-block'
       }
     }

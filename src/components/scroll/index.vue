@@ -1,23 +1,24 @@
 <template lang="html">
   <div class="scroll" ref="scroll">
-    <div class="scroll-arrow scroll-arrow-back" @mousedown="scroll('backward', true)" @mouseup="scroll('backward', false)">
-      <lav-icon icon-name="arrow-left" color="#fff"></lav-icon>
-    </div>
+    <div class="scroll-arrow scroll-arrow-back" @mousedown="scroll('backward', true)" @mouseup="scroll('backward', false)">B</div>
     <div class="scroll-wrap" :style="wrapStyles" ref="wrap">
-      <slot></slot>
+      <div class="scroll-item" v-for="item in items" :key="item" ref="item">
+        {{ item }}
+      </div>
+      <div class="scroll-item scroll-item-big">
+        10
+      </div>
     </div>
-    <div class="scroll-arrow scroll-arrow-forward" @mousedown="scroll('forward', true)" @mouseup="scroll('forward', false)">
-      <lav-icon icon-name="arrow-right" color="#fff"></lav-icon>
-    </div>
+    <div class="scroll-arrow scroll-arrow-forward" @mousedown="scroll('forward', true)" @mouseup="scroll('forward', false)">F</div>
   </div>
 </template>
 
 <script>
-import lavIcon from '../icon';
 export default {
-  components: { lavIcon },
   data() {
     return {
+      active: 1,
+      items: [1, 2, 3, 4, 5, 6, 7, 8, 9],
       transform: 0
     }
   },
@@ -66,10 +67,9 @@ export default {
 <style lang="css">
 .scroll {
   position: relative;
-  width: 100%;
-  text-align: center;
-  overflow: hidden;
-  height: 100%;
+  height: 150px;
+  max-width: 600px;
+  overflow-x: hidden;
 }
 .scroll-arrow {
   position: absolute;
