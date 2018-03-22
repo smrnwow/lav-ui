@@ -1,10 +1,10 @@
 <template>
-  <div class="lav-dropdown-wrap" ref="wrap">
-    <div ref="trigger">
+  <div class="lav-dropdown" ref="wrap">
+    <div class="lav-dropdown-trigger" ref="trigger">
       <slot name="trigger"></slot>
     </div>
-    <transition name="fade">
-      <div v-show="visible" class="lav-dropdown">
+    <transition name="lav-fade">
+      <div v-show="visible" class="lav-dropdown-body">
         <slot name="body"></slot>
       </div>
     </transition>
@@ -50,26 +50,3 @@ export default {
   }
 }
 </script>
-
-<style lang="css">
-.lav-dropdown-wrap {
-  position: relative;
-  display: inline-block;
-}
-.lav-dropdown {
-  position: absolute;
-  right: 0;
-  width: 100%;
-  top: 100%;
-  z-index: 100;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: .2s ease-in-out;
-}
-.fade-enter, .fade-leave-to {
-  transform: translateY(20px);
-  opacity: 0;
-}
-
-</style>
