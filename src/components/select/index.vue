@@ -25,7 +25,7 @@
     </span>
     <transition name="fade">
       <div v-show="dropdownVisible" class="lav-select-dropdown" ref="dropdown">
-        <div v-for="(option, i) in getOptions" :key="option.value" class="lav-select-dropdown-item" @click="select(option, i)"
+        <div v-for="(option, i) in getOptions" :key="option.id" class="lav-select-dropdown-item" @click="select(option, i)"
           :class="[getActive(option), getHovered(i)]" @mouseenter="setCursor(i)">
           {{ option.name }}
         </div>
@@ -54,15 +54,7 @@ export default {
     },
     options: {
       type: Array,
-      default: () => ([]),
-      validator: value => {
-        if(value.length === 0) return value;
-        value.forEach(prop => {
-          if(!prop.hasOwnProperty('name') || !prop.hasOwnProperty('value'))
-            throw new SyntaxError('Options should contains \'name\' and \'value\' properties');
-        })
-        return value;
-      }
+      default: () => ([])
     },
     searchAction: {
       type: Function
@@ -79,8 +71,12 @@ export default {
       selected: [],
       dropdownVisible: false,
       cursor: -1,
-      filteredOptions: []
+      filteredOptions: [],
+      numeredOptions: []
     }
+  },
+  created() {
+    this.getNumered(this.options);
   },
   mounted() {
     window.addEventListener('click', this.inputBlur);
@@ -178,13 +174,19 @@ export default {
     },
     removeSelected(index) {
       this.selected.splice(index, 1);
+    },
+    getNumered(options) {
+      this.numeredOptions = options.map((item, i) => ({ ...item, id: i }));
     }
   },
   watch: {
+    options(n) {
+      this.getNumered(n);
+    },
     getOptions(n) {
       let entry = 0;
       n.forEach((prop, i) => {
-        if(prop.value === this.cursor) {
+        if(prop.id === this.cursor) {
           return entry = (i + 1);
         }
       })
@@ -196,7 +198,7 @@ export default {
   },
   computed: {
     getOptions() {
-      return (this.searchString) ? this.filteredOptions : this.options;
+      return (this.searchString) ? this.filteredOptions : this.numeredOptions;
     },
     showNoDataOption() {
       return (!this.filteredOptions.length && this.searchString.length > 0);
