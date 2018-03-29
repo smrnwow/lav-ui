@@ -3,6 +3,7 @@ import lavBreadcrumbs from './components/breadcrumbs/index.vue';
 import lavButton from './components/button/index.vue';
 import lavCard from './components/card/index.vue';
 import lavCheckbox from './components/checkbox/index.vue';
+import lavCheckboxGroup from './components/checkbox-group/index.vue';
 import lavDivider from './components/divider/index.vue';
 import lavDropdown from './components/dropdown/index.vue';
 import lavFileInput from './components/file-input/index.vue';
@@ -42,6 +43,7 @@ const LavUI = {
     lavButton,
     lavCard,
     lavCheckbox,
+    lavCheckboxGroup,
     lavDivider,
     lavDropdown,
     lavFileInput,
@@ -72,6 +74,7 @@ const LavUI = {
         Vue.component('lav-button', lavButton);
         Vue.component('lav-card', lavCard);
         Vue.component('lav-checkbox', lavCheckbox);
+        Vue.component('lav-checkbox-group', lavCheckboxGroup);
         Vue.component('lav-divider', lavDivider);
         Vue.component('lav-dropdown', lavDropdown);
         Vue.component('lav-file-input', lavFileInput);
@@ -112,6 +115,7 @@ export { lavBreadcrumbs };
 export { lavButton };
 export { lavCard };
 export { lavCheckbox };
+export { lavCheckboxGroup };
 export { lavDivider };
 export { lavDropdown };
 export { lavFileInput };
