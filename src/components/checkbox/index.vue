@@ -5,7 +5,7 @@
       <div class="lav-checkbox-indicator" :style="indicatorStyles">
         <transition :name="transitionName">
           <span v-show="checked" class="lav-checkbox-indicator-wrap">
-            <lav-icon :height="size" :width="size" icon-name="check-mark" color="#fff"></lav-icon>
+            <lav-icon :size="size" name="check-mark" color="#fff"></lav-icon>
           </span>
         </transition>
       </div>

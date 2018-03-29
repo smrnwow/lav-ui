@@ -4,11 +4,11 @@
       <input :type="type" class="lav-input" @input="update" v-model="value" 
         :placeholder="props.placeholder" />
       <span v-if="showCleaner" class="lav-input-cleaner" @click="clearInput">
-        <lav-icon icon-name="close" :height="9" :width="9"></lav-icon>
+        <lav-icon name="close" :size="9"></lav-icon>
       </span>
     </span>
     <span class="lav-input-after" @click="showInput">
-      <lav-icon icon-name="eye"></lav-icon>
+      <lav-icon name="eye"></lav-icon>
     </span>
   </label>
 </template>

@@ -9,7 +9,7 @@
           <div class="lav-modal-header">
             <slot name="header"></slot>
             <span class="lav-modal-close" @click="close">
-              <lav-icon icon-name="close"></lav-icon>
+              <lav-icon name="close"></lav-icon>
             </span>
           </div>
           <div class="lav-modal-body">

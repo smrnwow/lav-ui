@@ -1,7 +1,7 @@
 <template lang="html">
   <button v-lav-ripple="rippleColor" :style="styles" class="lav-button" @click="handler">
     <span class="lav-button-icon" v-if="hasIcon">
-      <lav-icon :icon-name="icon" :color="iconColor"></lav-icon>
+      <lav-icon :name="icon" :color="iconColor"></lav-icon>
     </span>
     <span class="lav-button-body">
       <slot></slot>

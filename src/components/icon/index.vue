@@ -1,5 +1,5 @@
 <template>
-  <component :is="iconName" :height="height" :width="width" :color="color" />
+  <component :is="name" :size="size" :color="color" />
 </template>
 
 <script>
@@ -16,12 +16,8 @@ import checkMark from './check-mark';
 export default {
   components: { close, arrowDown, arrowUp, arrowLeft, arrowRight, pen, eye, heart, checkMark },
   props: {
-    iconName: String,
-    height: {
-      type: [Number, String],
-      default: 16
-    },
-    width: {
+    name: String,
+    size: {
       type: [Number, String],
       default: 16
     },

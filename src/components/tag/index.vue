@@ -5,7 +5,7 @@
         {{ label }}
       </span>
       <span v-if="deletable" class="lav-tag-close" @click.stop="deleteTag">
-        <lav-icon icon-name="close" :color="color"></lav-icon>
+        <lav-icon name="close" :color="color"></lav-icon>
       </span>
     </span>
   </transition>

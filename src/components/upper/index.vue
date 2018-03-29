@@ -1,7 +1,7 @@
 <template>
   <transition name="lav-slide-up">
     <button class="lav-upper" v-show="show" @click="handleClick">
-      <lav-icon :icon-name="icon"></lav-icon>
+      <lav-icon :name="icon"></lav-icon>
     </button>
   </transition>
 </template>

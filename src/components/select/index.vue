@@ -7,7 +7,7 @@
           <span class="lav-select-selected" v-for="(item, i) in selected" @click.stop="removeSelected(i)" :key="item.name">
             {{ item.name }}
             <span class="lav-select-selected-remove">
-              <lav-icon icon-name="close" :height="7" :width="7" color="#fff" />
+              <lav-icon name="close" :size="7" color="#fff" />
             </span>
           </span>
         </span>
@@ -17,11 +17,11 @@
       <input v-if="searchable && searching" class="lav-input" tabindex type="text" v-model="searchString" @input="search" placeholder="Поиск"
         @keydown.down="scrollDropdown" @keydown.up="scrollDropdown" @keydown.enter="keyBoardSelect" ref="searchInput" />
       <span v-if="cleanerVisible" class="lav-input-cleaner" @click="clearInput">
-        <lav-icon icon-name="close" :height="9" :width="9"></lav-icon>
+        <lav-icon name="close" :size="9"></lav-icon>
       </span>
     </span>
     <span class="lav-input-after">
-      <lav-icon icon-name="arrow-down"></lav-icon>
+      <lav-icon name="arrow-down"></lav-icon>
     </span>
     <transition name="fade">
       <div v-show="dropdownVisible" class="lav-select-dropdown" ref="dropdown">

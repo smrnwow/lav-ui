@@ -1,13 +1,13 @@
 <template lang="html">
   <div class="scroll" ref="scroll">
     <div class="scroll-arrow scroll-arrow-back" @mousedown="scroll('backward', true)" @mouseup="scroll('backward', false)">
-      <lav-icon icon-name="arrow-left" color="#fff"></lav-icon>
+      <lav-icon name="arrow-left" color="#fff"></lav-icon>
     </div>
     <div class="scroll-wrap" :style="wrapStyles" ref="wrap">
       <slot></slot>
     </div>
     <div class="scroll-arrow scroll-arrow-forward" @mousedown="scroll('forward', true)" @mouseup="scroll('forward', false)">
-      <lav-icon icon-name="arrow-right" color="#fff"></lav-icon>
+      <lav-icon name="arrow-right" color="#fff"></lav-icon>
     </div>
   </div>
 </template>
