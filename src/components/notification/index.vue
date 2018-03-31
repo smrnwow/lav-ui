@@ -1,28 +1,36 @@
 <template lang="html">
   <transition :name="transitionName">
-    <div v-show="visible" class="notification" :class="[classes]" @click="handleClick" 
+    <div v-show="visible" class="lav-notification" :class="[classes]" 
       @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
-      <div class="notification__header">
-        <slot name="icon"></slot>
+      <div class="lav-notification-header">
+        <lav-icon :name="type" :color="iconColor" :size="30" />
       </div>
-      <div class="notification__body">
+      <div class="lav-notification-body">
         {{ text }}
+        {{ id }}
       </div>
+      <span class="lav-notification-close" @click="close">
+        <lav-icon name="close" :size="12" />
+      </span>
     </div>
   </transition>
 </template>
 
 <script>
+import lavIcon from '../icon';
 export default {
+  components: { lavIcon },
   data() {
     return {
       type: 'info',
       position: 'top-right',
-      visible: false
+      autoclose: false,
+      visible: false,
+      id: null
     }
   },
   methods: {
-    handleClick() {
+    close() {
       this.destroy();
     },
     handleMouseEnter() {
@@ -40,7 +48,9 @@ export default {
       }, 200)
     },
     startTimer() {
-      this.timer = setTimeout(this.destroy, 5000);
+      if(this.autoclose) {
+        this.timer = setTimeout(this.destroy, 5000);
+      }
     },
     finishTimer() {
       clearTimeout(this.timer);
@@ -52,19 +62,25 @@ export default {
   computed: {
     classes() {
       return [
-        `notification_${this.type}`,
-        `notification_${this.position.split('-')[1]}`
+        `lav-notification-${this.type}`,
+        `lav-notification-${this.position.split('-')[1]}`
       ]
     },
     transitionName() {
       return `lav-slide-${this.position.split('-')[1]}`
+    },
+    iconColor() {
+      if(this.type === 'info') return '#3FB6DC';
+      if(this.type === 'warning') return '#FFC800';
+      if(this.type === 'success') return '#2DC76D';
+      if(this.type === 'alert') return '#FF7052';
     }
   }
 }
 </script>
 
 <style lang="css">
-.notification {
+.lav-notification {
   display: flex;
   position: fixed;
   width: 400px;
@@ -74,36 +90,39 @@ export default {
   transition: .1s ease-in-out;
   /* border-radius: 5px; */
 }
-.notification_right {
+.lav-notification-right {
   right: 20px;
 }
-.notification_left {
+.lav-notification-left {
   left: 20px;
 }
-.notification__header {
+.lav-notification-header {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30%;
+  width: 15%;
 }
-.notification__body {
+.lav-notification-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.lav-notification-body {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 70%;
-  padding: 30px 20px;
+  width: 85%;
+  padding: 30px 30px 30px 0;
 }
-.notification_warn {
-  border-left: 3px solid #FFC800;
+.lav-notification-warning {
+  border-left: 5px solid #FFC800;
 }
-.notification_info {
-  border-left: 3px solid #3FB6DC;
+.lav-notification-info {
+  border-left: 5px solid #3FB6DC;
 }
-.notification_success {
-  border-left: 3px solid #2DC76D;
+.lav-notification-success {
+  border-left: 5px solid #2DC76D;
 }
-.notification_alert {
-  border-left: 3px solid #FF7052;
+.lav-notification-alert {
+  border-left: 5px solid #FF7052;
 }
 .notif-leave-active {
   transition: .2s ease-in-out;

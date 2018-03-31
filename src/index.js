@@ -15,6 +15,7 @@ import lavModal from './components/modal/modal.vue';
 import lavPagination from './components/pagination/index.vue';
 import lavProgress from './components/progress/index.vue';
 import lavRadio from './components/radio/index.vue';
+import lavRadioGroup from './components/radio-group/index.vue';
 import lavSelect from './components/select/index.vue';
 import lavSwitch from './components/switch/index.vue';
 import lavTabs from './components/tabs/tabs.vue';
@@ -56,6 +57,7 @@ const LavUI = {
     lavPagination,
     lavProgress,
     lavRadio,
+    lavRadioGroup,
     lavSelect,
     lavSwitch,
     lavTabs,
@@ -86,6 +88,7 @@ const LavUI = {
         Vue.component('lav-pagination', lavPagination);
         Vue.component('lav-progress', lavProgress);
         Vue.component('lav-radio', lavRadio);
+        Vue.component('lav-radio-group', lavRadioGroup);
         Vue.component('lav-select', lavSelect);
         Vue.component('lav-switch', lavSwitch);
         Vue.component('lav-tabs', lavTabs);
@@ -128,6 +131,7 @@ export { notificationController };
 export { lavPagination };
 export { lavProgress };
 export { lavRadio };
+export { lavRadioGroup };
 export { lavSelect };
 export { lavSwitch };
 export { lavTabs };

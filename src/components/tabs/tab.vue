@@ -1,31 +1,35 @@
 <template lang="html">
-  <div class="lav-tab" @click="handle">
-    <slot></slot>
+  <div :class="classes" @click="handleClick">
+    <div class="tab-label">
+      <slot name="label"></slot>
+    </div>
   </div>
 </template>
 
 <script>
-import bus from '../../helpers/bus.js';
 export default {
+  name: 'tab',
+  props: {
+    name: {
+      type: String,
+      default: ''
+    }
+  },
+  computed: {
+    isCurrent() {
+      return this.$parent.current === this.name;
+    },
+    classes() {
+      return [
+        'tab',
+        { 'tab-current': this.isCurrent }
+      ]
+    }
+  },
   methods: {
-    handle() {
-      this.$nextTick(() => {
-        let offset = {
-          left: this.$parent.$el.getBoundingClientRect().left,
-          top: this.$parent.$el.getBoundingClientRect().top
-        }
-        let data = {
-          width: this.$el.getBoundingClientRect().width + 'px',
-          left: (this.$el.getBoundingClientRect().left - offset.left) + 'px',
-          height: this.$el.getBoundingClientRect().height + 'px',
-          top: (this.$el.getBoundingClientRect().top - offset.top) + 'px'
-        };
-        bus.$emit('lav-tab-change', { data })
-      })
+    handleClick(e) {
+      this.$parent.$emit('change-tab', { current: this.name });
     }
   }
 }
 </script>
-
-<style lang="css">
-</style>

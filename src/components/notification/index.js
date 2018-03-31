@@ -1,40 +1,61 @@
 import notification from './index.vue';
+import Queue from '../../helpers/queue';
+
+const queue = new Queue();
 const Factory = Vue.extend(notification);
 
 
-let notifs = [];
-let id = 0;
-const notif = {
+
+const NotifyController = {
   state: {
-    position: 'top-right',
-    offset: 20
+    config: {
+      position: 'top-right',
+      offset: 20,
+      max: 3  
+    },
+    notifs: [],
+    id: 0
   },
   add(opts = {}) {
     let instance = new Factory({ data: opts });
-    instance.vm = instance.$mount();
-    instance.vm.id = id++;
     this._setState(opts);
-    notifs.unshift(instance.vm);
-    document.body.append(instance.vm.$el);
-    instance.vm.visible = true;
+    this._spread(instance);
     this._rerender();
-    instance.vm.$on('close', id => {
-      this._remove(id);
-    });      
   },
   _setState({ position = 'top-right', offset = 20 } = {}) {
-    this.state.position = position;
-    this.state.offset = offset;
+    this.state.config.position = position;
+    this.state.config.offset = offset;
+  },
+  _spread(instance) {
+    if((this.state.notifs.length < this.state.config.max) && (queue.isEmpty())) {
+      this._createInstance(instance);
+    } else {
+      queue.add(instance);
+    }
+  },
+  _addFromQueue() {
+    if(queue.isEmpty()) return false;
+    this._createInstance(queue.getFirst());
+    this._rerender();
+  },
+  _createInstance(instance) {
+    instance.vm = instance.$mount();
+    instance.vm.id = this.state.id++;  
+    this.state.notifs.push(instance.vm);
+    document.body.append(instance.vm.$el);
+    instance.vm.visible = true;  
+    instance.vm.$on('close', id => this._remove(id));        
   },
   _remove(id) {
-    notifs = notifs.filter(item => item.id !== id);
+    this.state.notifs = this.state.notifs.filter(item => item.id !== id);
     this._rerender();
+    this._addFromQueue();
   },
   _rerender() {
     Vue.nextTick(() => {
-      let offset = this.state.offset;
-      notifs.filter(item => item.position === this.state.position).forEach((item, i) => {
-        item.$el.style[this.state.position.split('-')[0]] = offset + (15 * i) + 'px';
+      let offset = this.state.config.offset;
+      this.state.notifs.filter(item => item.position === this.state.config.position).forEach((item, i) => {
+        item.$el.style[this.state.config.position.split('-')[0]] = offset + (15 * i) + 'px';
         offset += item.$el.offsetHeight;
       })
     })
@@ -42,4 +63,4 @@ const notif = {
 }
 
 
-export default notif;
+export default NotifyController;

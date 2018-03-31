@@ -1,5 +1,5 @@
 <template lang="html">
-  <label class="lav-checkbox" :class="{ 'control_checked': checked }">
+  <label class="lav-checkbox" :class="{ 'lav-checkbox-checked': checked }">
     <input type="checkbox" class="lav-checkbox-input" v-model="checked" @change="handleChange" />
     <slot>
       <div class="lav-checkbox-indicator" :style="indicatorStyles">

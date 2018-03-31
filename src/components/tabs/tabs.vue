@@ -1,84 +1,64 @@
 <template lang="html">
-  <div class="lav-tabs" :style="[tabsStyles]">
-    <slot></slot>
-    <div class="lav-tabs-line" :style="[lineStyles]"></div>
+  <div class="tabs">
+    <div class="tabs-nav">
+      <slot></slot>
+    </div>
+    <transition name="fade" mode="out-in">
+      <div class="tabs-content" :key="current">
+        <slot name="content"></slot>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import bus from '../../helpers/bus.js';
 export default {
   props: {
-    tabs: {
-      type: Array,
-      default: () => ([])
-    },
-    direction: {
-      type: String,
-      default: 'horizontal'
-    },
-    defaultActive: {
-      type: Number,
-      default: 1
+    default: {
+      type: [Number, String]
     }
   },
   data() {
     return {
-      line: {},
-      current: this.defaultActive - 1
+      current: this.default,
+      content: null
     }
+  },
+  created() {
+    this.$on('change-tab', this.changeTabHandler);
   },
   mounted() {
-    this.calcSizeLine();
-    window.addEventListener('resize', this.calcSizeLine);
-    bus.$on('lav-tab-change', ({ data, index }) => {
-      this.line = data;
-    });
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.calcSizeLine);
+    this._setTabs();
+    this.changeTabHandler();
   },
   methods: {
-    calc() {
-      let childWidth = 0;
-      for(let item in this.$children) {
-          childWidth += this.$children[item].$el.getBoundingClientRect().width;
+    changeTabHandler(e) {
+      if(e && e.current !== this.current) {
+        this.current = e.current;
       }
-      if(childWidth > this.$el.getBoundingClientRect().width) {
-          console.log(childWidth - this.$el.getBoundingClientRect().width)
-      }
+      this.setCurrentContent();
     },
-    calcSizeLine() {
-      this.line = {
-        width: this.horizontal ? this.$children[this.current].$el.getBoundingClientRect().width + 'px' : '100%',
-        left: this.horizontal ? this.$children[this.current].$el.getBoundingClientRect().left - this.$el.getBoundingClientRect().left + 'px' : 0,
-        height: this.vertical ? this.$children[this.current].$el.getBoundingClientRect().height + 'px' : 'auto',
-        top: this.vertical ? this.$children[this.current].$el.getBoundingClientRect().top - this.$el.getBoundingClientRect().top + 'px' : 'auto',
-        bottom: this.horizontal ? 0 : 'auto'
-      };
-    }
-  },
-  computed: {
-    horizontal() {
-      return this.direction === 'horizontal';
+    setCurrentContent() {
+      let currentTab = this.tabs.filter(tb => tb.isCurrent)[0];
+      this.$slots.content = currentTab.$slots.content;
     },
-    vertical() {
-      return this.direction === 'vertical';
-    },
-    tabsStyles() {
-      return {
-        width: this.horizontal ? '100%' : 'auto',
-        height: 'auto',
-        flexDirection: this.horizontal ? 'row' : 'column'
+    changeTab(type) {
+      for(let tab in this.tabs) {
+        tab = parseInt(tab);
+        if(this.tabs[tab].isCurrent) {
+          let nextTabIndex = (type === 'decrement') ? tab - 1 : tab + 1;
+          if((nextTabIndex >= 0) && nextTabIndex <= (this.tabs.length - 1)) {
+            let nextTab = (type === 'decrement') ? this.tabs[tab - 1].name : this.tabs[tab + 1].name;
+            this.$emit('change-tab', { current: nextTab });
+          }
+          return;
+        }
       }
     },
-    lineStyles() {
-      return {
-        width: this.horizontal ? this.line.width : '100%',
-        height: this.vertical ? this.line.height : '100%',
-        top: this.vertical ? this.line.top : 'auto',
-        bottom: this.horizontal ? 0 : 'auto',
-        left: this.horizontal ? this.line.left : 0
+    _setTabs() {
+      this.tabs = this.$children.filter(item => item.$options.name === 'tab');
+      if(!this.tabs.length) {
+        throw new Error('zero tabs privided');
       }
     }
   }
@@ -86,30 +66,54 @@ export default {
 </script>
 
 <style lang="css">
-.lav-tabs {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background-color: #007FB2;
-    border-radius: 5px;
+.tabs-nav {
+  display: flex;
 }
-.lav-tab {
-    position: relative;
-    display: flex;
-    align-items: center;
-    z-index: 10;
-    cursor: pointer;
-    justify-content: flex-start;
-    width: 100%;
-    color: #fff;
-    padding: 10px;
+.tabs-arrow {
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #576076;
 }
-.lav-tabs-line {
-    position: absolute;
-    bottom: 0;
-    height: 4px;
-    background-color: rgba(255,255,255,.15);
-    transition: .2s ease-in-out;
-    border-radius: 4px;
+.tab {
+  background-color: #DEE2EE;
+  text-align: center;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
+  transition: .2s ease-in-out;
+  width: 100%;
+  font-weight: 300;
+}
+.tab-label {
+  cursor: pointer;
+  user-select: none;
+  padding: 5px 10px;
+}
+.tab-number {
+  border-bottom: 2px solid #fff;
+}
+.tab-day {
+  padding: 5px 10px;
+}
+.tab-current {
+  background-color: #576076;
+  color: #fff;
+}
+.tabs-content {
+  overflow: hidden;
+  padding: 10px;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: .2s ease-in-out;
+}
+.fade-enter {
+  opacity: 0;
+  transform: translateX(100px);
+}
+.fade-leave-to {
+  opacity: 0;
+  transform: translateX(-100px);
 }
 </style>

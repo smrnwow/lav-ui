@@ -12,9 +12,13 @@ import pen from './pen';
 import eye from './eye';
 import heart from './heart';
 import checkMark from './check-mark';
+import success from './success';
+import alert from './alert';
+import info from './info';
+import warning from './warning';
 
 export default {
-  components: { close, arrowDown, arrowUp, arrowLeft, arrowRight, pen, eye, heart, checkMark },
+  components: { close, arrowDown, arrowUp, arrowLeft, arrowRight, pen, eye, heart, checkMark, success, alert, info, warning },
   props: {
     name: String,
     size: {
