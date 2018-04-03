@@ -1,5 +1,6 @@
 <template lang="html">
-  <div :class="classes" @click="handleClick">
+  <div :class="classes" @click="clickHandler" @focus="clickHandler" tabindex
+    @mouseenter="hoverHandler" @mouseleave="hoverHandler">
     <div class="tab-label">
       <slot name="label"></slot>
     </div>
@@ -9,6 +10,11 @@
 <script>
 export default {
   name: 'tab',
+  data() {
+    return {
+      hovered: false
+    }
+  },
   props: {
     name: {
       type: String,
@@ -22,12 +28,19 @@ export default {
     classes() {
       return [
         'tab',
-        { 'tab-current': this.isCurrent }
+        { 'tab-current': this.isCurrent },
+        { 'tab-horizontal': this.$parent.direction === 'horizontal' },
+        { 'tab-vertical': this.$parent.direction === 'vertical' },
+        { 'tab-hovered-horizontal': this.hovered && this.$parent.direction === 'horizontal' },
+        { 'tab-hovered-vertical': this.hovered && this.$parent.direction === 'vertical' }
       ]
     }
   },
   methods: {
-    handleClick(e) {
+    hoverHandler(e) {
+      this.hovered = !this.hovered;
+    },
+    clickHandler(e) {
       this.$parent.$emit('change-tab', { current: this.name });
     }
   }

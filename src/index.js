@@ -22,6 +22,7 @@ import lavTabs from './components/tabs/tabs.vue';
 import lavTab from './components/tabs/tab.vue';
 import lavTag from './components/tag/index.vue';
 import lavTextarea from './components/textarea/index.vue';
+import lavTooltip from './components/tooltip/index.vue';
 import lavUpper from './components/upper/index.vue';
 
 import lavContainer from './components/layout/container/index.vue';
@@ -64,6 +65,7 @@ const LavUI = {
     lavTab,
     lavTag,
     lavTextarea,
+    lavTooltip,
     lavUpper,
  
     lavContainer,
@@ -95,6 +97,7 @@ const LavUI = {
         Vue.component('lav-tab', lavTab);
         Vue.component('lav-tag', lavTag);
         Vue.component('lav-textarea', lavTextarea);
+        Vue.component('lav-tooltip', lavTooltip);
         Vue.component('lav-upper', lavUpper);
 
         Vue.component('lav-container', lavContainer);
@@ -138,6 +141,7 @@ export { lavTabs };
 export { lavTab };
 export { lavTag };
 export { lavTextarea };
+export { lavTooltip };
 export { lavUpper };
 
 export { lavContainer };

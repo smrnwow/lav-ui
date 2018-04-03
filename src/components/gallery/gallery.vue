@@ -10,7 +10,7 @@
                     <button class="lav-gallery-arrow lav-gallery-arrow_left" @click="prev" :class="[prevDisabled]">
                         <lav-icon name="arrow-left" :size="30"></lav-icon>
                     </button>
-                    <transition name="fade">
+                    <transition name="lav-carousel">
                         <img class="lav-gallery-selected__image" :key="active" :src="images[active]" />
                     </transition>
                     <button class="lav-gallery-arrow lav-gallery-arrow_right" @click="next" :class="[nextDisabled]">
