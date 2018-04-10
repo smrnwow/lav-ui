@@ -1,6 +1,6 @@
 {
   "name": "lav-ui",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Another one ui lib",
   "main": "build/index.js",
   "scripts": {
