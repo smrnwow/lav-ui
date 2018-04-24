@@ -27,6 +27,9 @@ export default {
       default: 150
     }
   },
+  mounted() {
+    console.log(this.$slots);
+  },
   methods: {
     scroll(direction, flag) {
       const isForward = (direction === 'forward');

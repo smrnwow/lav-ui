@@ -19,9 +19,9 @@
       <span v-if="cleanerVisible" class="lav-input-cleaner" @click="clearInput">
         <lav-icon name="close" :size="9"></lav-icon>
       </span>
-    </span>
-    <span class="lav-input-after">
-      <lav-icon name="arrow-down"></lav-icon>
+      <span class="lav-input-after">
+        <lav-icon name="arrow-down"></lav-icon>
+      </span>
     </span>
     <transition name="fade">
       <div v-show="dropdownVisible" class="lav-select-dropdown" ref="dropdown">

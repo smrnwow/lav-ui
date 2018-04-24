@@ -16,9 +16,13 @@ import success from './success';
 import alert from './alert';
 import info from './info';
 import warning from './warning';
+import smile from './smile';
+import star from './star';
+import remove from './remove';
+import send from './send';
 
 export default {
-  components: { close, arrowDown, arrowUp, arrowLeft, arrowRight, pen, eye, heart, checkMark, success, alert, info, warning },
+  components: { close, arrowDown, arrowUp, arrowLeft, arrowRight, pen, eye, heart, checkMark, success, alert, info, warning, smile, star, remove, send },
   props: {
     name: String,
     size: {

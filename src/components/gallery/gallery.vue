@@ -1,5 +1,5 @@
 <template lang="html">
-    <transition name="fade">
+    <transition name="lav-fade">
         <div class="lav-gallery" v-if="visible">
             <span class="lav-gallery-close" @click="close">
                 <lav-icon name="close" :size="30" color="#fff"></lav-icon>
@@ -10,7 +10,7 @@
                     <button class="lav-gallery-arrow lav-gallery-arrow_left" @click="prev" :class="[prevDisabled]">
                         <lav-icon name="arrow-left" :size="30"></lav-icon>
                     </button>
-                    <transition name="lav-carousel">
+                    <transition :name="transition">
                         <img class="lav-gallery-selected__image" :key="active" :src="images[active]" />
                     </transition>
                     <button class="lav-gallery-arrow lav-gallery-arrow_right" @click="next" :class="[nextDisabled]">

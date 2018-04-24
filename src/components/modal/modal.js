@@ -13,7 +13,13 @@ export default {
     fullHeight: {
       type: Boolean,
       default: false
-    }
+    },
+    dialog: {
+      type: Boolean,
+      default: false
+    },
+    cancelButtonText: String,
+    applyButtonText: String
   },
   data() {
     return {
@@ -42,6 +48,14 @@ export default {
     },
     close() {
       this.visible = false;
+    },
+    cancelHandler() {
+      this.$emit('cancel');
+      this.close();
+    },
+    applyHandler() {
+      this.$emit('apply');
+      this.close();
     }
   }
 }

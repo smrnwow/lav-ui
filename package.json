@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "start": "webpack-dev-server --progress",
-    "build": "webpack --progress",
+    "build": "webpack --progress --mode production",
     "flow": "flow"
   },
   "repository": {
@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "color": "^3.0.0",
+    "emoji-mart-vue": "^2.5.3",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1"
   },
@@ -31,10 +32,11 @@
     "flow-bin": "^0.66.0",
     "html-loader": "^0.5.5",
     "style-loader": "^0.19.1",
-    "vue-loader": "^13.7.0",
+    "vue-loader": "^14.2.2",
     "vue-template-compiler": "^2.5.16",
-    "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.9.7"
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.15",
+    "webpack-dev-server": "^2.11.2"
   },
   "babel": {
     "presets": [

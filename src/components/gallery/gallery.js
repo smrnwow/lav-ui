@@ -11,12 +11,14 @@ export default {
     thumbs: {
       type: Boolean,
       default: true
-    }
+    },
+    name: String
   },
   data() {
     return {
       active: 0,
-      visible: false
+      visible: false,
+      transition: 'lav-gallery-next'
     }
   },
   mounted() {
@@ -28,24 +30,33 @@ export default {
     window.removeEventListener('keydown', this.handleKeyboard);
   },
   methods: {
-    open() {
-      this.visible = true;
+    open(name) {
+      if(this.name === name) {
+        this.visible = true;
+      }
     },
     close() {
       this.visible = false;
       this.active = 0;
     },
     next() {
+      this.setNextTransition();
       if(this.active < this.images.length - 1) {
         this.active++;
       }
     },
     prev() {
+      this.setPrevTransition();
       if(this.active > 0) {
         this.active--;
       }
     },
     handleSelect(index) {
+      if(this.active > index) {
+        this.setPrevTransition();
+      } else {
+        this.setNextTransition();
+      }
       this.active = index;
     },
     handleKeyboard(e) {
@@ -57,6 +68,12 @@ export default {
         case 27: this.close();
           break;
       }
+    },
+    setPrevTransition() {
+      this.transition = 'lav-gallery-prev';
+    },
+    setNextTransition() {
+      this.transition = 'lav-gallery-next';
     }
   },
   computed: {
