@@ -1,14 +1,16 @@
 <template lang="html">
   <label class="lav-label">
     <span class="lav-input-wrap">
-      <input :type="type" class="lav-input" @input="update" v-model="value" 
-        :placeholder="props.placeholder" />
+      <span class="lav-input-after" v-if="before">
+        <lav-icon :name="beforeIcon"></lav-icon>
+      </span>
+      <input :type="type" class="lav-input" @input="update" v-model="val" :placeholder="placeholder" />
       <span v-if="showCleaner" class="lav-input-cleaner" @click="clearInput">
         <lav-icon name="close" :size="9"></lav-icon>
       </span>
     </span>
     <span class="lav-input-after" @click="showInput">
-      <lav-icon name="eye"></lav-icon>
+      <lav-icon :name="afterIcon"></lav-icon>
     </span>
   </label>
 </template>
@@ -20,28 +22,28 @@ export default {
   components: { lavIcon },
   data() {
     return {
-      value: '',
+      val: '',
       showValue: false
     }
   },
   props: {
-    props: {
-      type: Object
-    },
-    omega: {
+    value: String,
+    placeholder: String,
+    before: {
       type: Boolean,
       default: false
-    }
+    },
+    beforeIcon: String
   },
   computed: {
     showCleaner() {
       return this.value.length > 0;
     },
-    showOmega() {
-      return this.omega && this.value.length <= 0;
-    },
     type() {
       return this.showValue ? 'text' : 'password';
+    },
+    afterIcon() {
+      return this.showValue ? 'eye' : 'eye-closed';
     }
   },
   methods: {
@@ -49,12 +51,12 @@ export default {
       this.showValue = !this.showValue;
     },
     clearInput() {
-      this.value = '';
+      this.val = '';
       this.showValue = false;
       this.$emit('input', '');
     },
     update(e) {
-      this.$emit('input', e.target.value);
+      this.$emit('input', this.val);
     },
   }
 }

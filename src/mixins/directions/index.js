@@ -7,7 +7,6 @@ export default {
       let sProp = this.isVertical ? this.first : this.second;
       this.$refs.body.style.top = this[fProp](triggerPos, bodyPos);
       this.$refs.body.style.left = this[sProp](triggerPos, bodyPos);
-      this.pointerStyles(triggerPos, bodyPos);
     },
     topVertical(trigger, body) {
       return trigger.top + 'px';
@@ -38,29 +37,6 @@ export default {
     },
     rightHorizontal(trigger, body) {
       return trigger.left + 'px';
-    },
-    pointerStyles(trigger, body) {
-      let { pointer } = this.$refs;
-      let name = this.isVertical ? 'top' : 'left';
-      let nameSecond = this.position.split('-')[1];
-      switch(nameSecond) {
-        case 'top': 
-          pointer.style[name] = (trigger.height / 2) + 'px';
-          break;
-        case 'center':
-          pointer.style[name] = '50%';
-          break;  
-        case 'bottom':
-          pointer.style[name] = (body.height - (trigger.height / 2)) + 'px';
-          break;
-        case 'right':
-          pointer.style[name] = (trigger.width / 2) + 'px';
-          break;
-        case 'left':
-          pointer.style[name] = (body.width - (trigger.width / 2)) + 'px';
-          break;  
-      }
-      pointer.style.transform = this.setTranslate;
     }
   },
   computed: {

@@ -10,6 +10,7 @@ import arrowLeft from './arrow-left';
 import arrowRight from './arrow-right';
 import pen from './pen';
 import eye from './eye';
+import eyeClosed from './eye-closed';
 import heart from './heart';
 import checkMark from './check-mark';
 import success from './success';
@@ -22,7 +23,7 @@ import remove from './remove';
 import send from './send';
 
 export default {
-  components: { close, arrowDown, arrowUp, arrowLeft, arrowRight, pen, eye, heart, checkMark, success, alert, info, warning, smile, star, remove, send },
+  components: { close, arrowDown, arrowUp, arrowLeft, arrowRight, pen, eye, eyeClosed, heart, checkMark, success, alert, info, warning, smile, star, remove, send },
   props: {
     name: String,
     size: {

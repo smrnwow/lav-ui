@@ -1,5 +1,5 @@
 <template lang="html">
-  <label class="lav-label" ref="wrap">
+  <label class="lav-select-label" ref="wrap">
     <span class="lav-input-wrap">
       <button v-if="!searching || !searchable" class="lav-input" ref="button" @click="startSearching"
         @keydown.down="scrollDropdown" @keydown.up="scrollDropdown" @keydown.enter="keyBoardSelect">
@@ -24,21 +24,23 @@
       </span>
     </span>
     <transition name="fade">
-      <div v-show="dropdownVisible" class="lav-select-dropdown" ref="dropdown">
+      <lav-select-options-list v-show="dropdownVisible" :options="getOptions" ref="dropdown" />
+      <!-- <div v-show="dropdownVisible" class="lav-select-dropdown" ref="dropdown">
         <div v-for="(option, i) in getOptions" :key="option.id" class="lav-select-dropdown-item" @click="select(option, i)"
           :class="[getActive(option), getHovered(i)]" @mouseenter="setCursor(i)">
           {{ option.name }}
         </div>
         <div v-if="showNoDataOption" class="lav-select-dropdown-item">Ничего не найдено</div>
-      </div>
+      </div> -->
     </transition>
   </label>
 </template>
 
 <script>
+import lavSelectOptionsList from './options-list';
 import lavIcon from '../icon';
 export default {
-  components: { lavIcon },
+  components: { lavIcon, lavSelectOptionsList },
   props: {
     multiple: {
       type: Boolean,
@@ -73,6 +75,11 @@ export default {
       cursor: -1,
       filteredOptions: [],
       numeredOptions: []
+    }
+  },
+  provide() {
+    return {
+      selected: this.selected
     }
   },
   created() {
@@ -176,7 +183,7 @@ export default {
       this.selected.splice(index, 1);
     },
     getNumered(options) {
-      this.numeredOptions = options.map((item, i) => ({ ...item, id: i }));
+      this.numeredOptions = options.map((item, i) => ({ ...item, lavId: i }));
     }
   },
   watch: {
@@ -186,7 +193,7 @@ export default {
     getOptions(n) {
       let entry = 0;
       n.forEach((prop, i) => {
-        if(prop.id === this.cursor) {
+        if(prop.lavId === this.cursor) {
           return entry = (i + 1);
         }
       })
@@ -209,3 +216,18 @@ export default {
   }
 }
 </script>
+<style media="screen">
+.lav-selectlabel {
+  position: relative;
+  display: flex;
+  /* align-items: center; */
+  /* justify-content: center; */
+  width: 100%;
+  /* height: 40px; */
+  /* overflow: hidden; */
+  background: var(--lav-input-background);
+  box-shadow: var(--lav-box-shadow);
+  border-radius: var(--lav-border-radius);
+  cursor: pointer;
+}
+</style>

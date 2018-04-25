@@ -5,8 +5,7 @@
     </div>
     <transition :name="transition">
       <div v-show="visible" class="lav-dropdown-body" ref="body">
-        <span :class="pointerClasses" ref="pointer"></span>
-        <slot name="body"></slot>
+        <slot></slot>
       </div>
     </transition>
   </div>
@@ -15,6 +14,7 @@
 <script>
 import directionsMixin from '../../mixins/directions';
 export default {
+  name: 'lav-dropdown',
   mixins: [directionsMixin],
   props: {
     trigger: {
@@ -38,6 +38,9 @@ export default {
   mounted() {
     this.addListeners();
   },
+  beforeDestroy() {
+    this.removeListeners();
+  },
   methods: {
     open() {
       this.visible = true;
@@ -53,7 +56,7 @@ export default {
         this.$refs.trigger.addEventListener('click', this.toggle);
       } else if(this.trigger === 'hover') {
         this.$refs.trigger.addEventListener('mouseover', this.open);
-        this.$refs.trigger.addEventListener('mouseleave', this.close)  
+        this.$refs.trigger.addEventListener('mouseleave', this.close)
       }
       window.addEventListener('click', e => {
         if(!this.$refs.wrap.contains(e.target)) this.close();
@@ -62,6 +65,20 @@ export default {
         if(this.visible) this.setStyles();
       });
     },
+    removeListeners() {
+      if(this.trigger === 'click') {
+        this.$refs.trigger.removeEventListener('click', this.toggle);
+      } else if(this.trigger === 'hover') {
+        this.$refs.trigger.removeEventListener('mouseover', this.open);
+        this.$refs.trigger.removeEventListener('mouseleave', this.close)
+      }
+      window.removeEventListener('click', e => {
+        if(!this.$refs.wrap.contains(e.target)) this.close();
+      });
+      window.removeEventListener('scroll', e => {
+        if(this.visible) this.setStyles();
+      })
+    }
   },
   computed: {
     transition() {

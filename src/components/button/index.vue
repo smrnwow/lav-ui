@@ -1,5 +1,5 @@
 <template lang="html">
-  <button v-lav-ripple="rippleColor" :style="styles" class="lav-button" @click="handler">
+  <button class="lav-button" :style="styles" @mousedown="getActive" @mouseup="getInactive" @click="clickHandler">
     <span class="lav-button-icon" v-if="hasIcon">
       <lav-icon :name="icon" :color="iconColor"></lav-icon>
     </span>
@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import Color from 'color';
+
 import lavIcon from '../icon';
 import colorMixin from '../../mixins/color/index.js';
 import lavRipple from '../../directives/ripple/index.js';
@@ -35,40 +37,30 @@ export default {
     plain: {
       type: Boolean,
       default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      loading: false
+      loading: false,
+      active: false,
+      styles: {}
     }
   },
+  created() {
+    this.setStyles();
+  },
   computed: {
-    rippleColor() {
-      return (this.autocolor || this.plain) ? this.setColor(this.color) : 'rgba(255, 255, 255, .3)';
-    },
-    styles() {
-      return this.plain ? this.plainStyles : this.normalStyles;
-    },
-    normalStyles() {
-      return {
-        backgroundColor: this.autocolor ? this.setColor(this.color) : this.color,
-        color: this.autocolor ? this.color : this.chooseColor(this.color),
-        boxShadow: `0 7px 14px ${this.setColor(this.color)}, 0 3px 6px ${this.setColor(this.color)}`
-      }
-    },
-    plainStyles() {
-      return {
-        color: this.color,
-        boxShadow: '0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08)'
-      }
-    },
     iconColor() {
       if(this.plain) {
         return this.color;
       } else if(this.autocolor) {
         return this.color;
       } else {
-        return this.chooseColor(this.color);
+        return this.setColorByContrast(this.color);
       }
     },
     hasIcon() {
@@ -76,7 +68,50 @@ export default {
     }
   },
   methods: {
-    handler(e) {
+    setStyles() {
+      if(this.autocolor && !this.plain && !this.disabled) {
+        this.setNormalStyles();
+      } else if(this.autocolor && this.plain) {
+        this.setPlainStyles();
+      } else if(!this.autocolor) {
+        this.setNotAutocolorStyles();
+      } else if(this.disabled) {
+        console.log('called');
+        this.setDisabledStyles();
+      }
+    },
+    setNormalStyles() {
+      this.setStyle('backgroundColor', this.setColorTransparent(this.color, 0.3));
+      this.setStyle('color', this.color);
+      this.setStyle('boxShadow', `0 7px 14px ${this.setColorTransparent(this.color, 0.3)}, 0 3px 6px ${this.setColorTransparent(this.color, 0.3)}`);
+    },
+    setPlainStyles() {
+      this.setStyle('color', this.color);
+      this.setStyle('backgroundColor', '#fff');
+      this.setStyle('boxShadow', '0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08)');
+    },
+    setNotAutocolorStyles() {
+      this.setStyle('backgroundColor', this.setColorTransparent(this.color, 0.3));
+      this.setStyle('color', this.setColorByContrast(this.color));
+      this.setStyle('boxShadow', `0 7px 14px ${this.setColorTransparent(this.color, 0.3)}, 0 3px 6px ${this.setColorTransparent(this.color, 0.3)}`);
+    },
+    setActiveStyles() {
+      this.setStyle('backgroundColor', this.setColorTransparent(this.color, 0.4));
+      this.setStyle('boxShadow', `0 6px 12px ${this.setColorTransparent(this.color, 0.4)}, 0 6px 12px ${this.setColorTransparent(this.color, 0.4)}`);
+    },
+    setDisabledStyles() {
+      this.setStyle('backgroundColor', this.setGray(this.color));
+    },
+    getActive() {
+      this.setActiveStyles();
+    },
+    getInactive() {
+      this.setStyles();
+    },
+    setStyle(property, value) {
+      this.$set(this.styles, property, value);
+    },
+    clickHandler(e) {
       this.$emit('click', e);
       this.loading = !this.loading;
     }

@@ -1,10 +1,10 @@
 <template lang="html">
-  <label class="lav-radio" :class="{ 'lav-radio-checked': model }">
-    <input type="radio" class="lav-radio-input" v-model="model" @change="handleChange" />
+  <label :class="classes">
+    <input type="radio" class="lav-radio-input" v-model="val" @change="changeHandler" />
     <slot>
       <div class="lav-radio-indicator" :style="indicatorStyles">
         <transition :name="transitionName">
-          <span v-show="model" class="lav-radio-indicator-wrap"></span>
+          <span v-show="val" class="lav-radio-indicator-wrap"></span>
         </transition>
       </div>
     </slot>
@@ -35,11 +35,11 @@ export default {
   },
   data() {
     return {
-      model: this.value
+      val: this.value
     }
   },
   methods: {
-    handleChange(e) {
+    changeHandler(e) {
       if(!this.inGroup) {
         this.$emit('input', this.checked);
         this.$emit('change', this.checked);
@@ -49,6 +49,12 @@ export default {
     }
   },
   computed: {
+    classes() {
+      return [
+        'lav-radio',
+        { 'lav-radio-checked': this.val }
+      ]
+    },
     inGroup() {
       return this.$parent.$options.name === 'lav-radio-group';
     },

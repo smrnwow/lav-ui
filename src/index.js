@@ -5,18 +5,33 @@ import lavCard from './components/card/index.vue';
 import lavCheckbox from './components/checkbox/index.vue';
 import lavCheckboxGroup from './components/checkbox-group/index.vue';
 import lavDivider from './components/divider/index.vue';
-import lavDropdown from './components/dropdown/index.vue';
+
+
+//dropdown
+import lavDropdown from './components/dropdown';
+import lavDropdownMenu from './components/dropdown/menu';
+import lavDropdownMenuItem from './components/dropdown/menu-item';
+
+
 import lavFileInput from './components/file-input/index.vue';
 import lavGallery from './components/gallery/gallery.vue';
 import lavGrid from './components/images-grid/index.vue';
 import lavInfinityScroll from './components/infinity-scroll/index.vue';
-import lavInput from './components/input/index.vue';
+
+//inputs
+import lavTextInput from './components/text-input';
+import lavPasswordInput from './components/password-input';
+
 import lavModal from './components/modal/modal.vue';
 import lavPagination from './components/pagination/index.vue';
 import lavProgress from './components/progress/index.vue';
 import lavRadio from './components/radio/index.vue';
 import lavRadioGroup from './components/radio-group/index.vue';
 import lavSelect from './components/select/index.vue';
+import lavSidebarMenu from './components/sidebar-menu';
+import lavSidebarMenuThree from './components/sidebar-menu/three';
+import lavSidebarMenuItem from './components/sidebar-menu/item';
+import lavSidebarMenuDivider from './components/sidebar-menu/divider';
 import lavSwitch from './components/switch/index.vue';
 import lavTabs from './components/tabs/tabs.vue';
 import lavTab from './components/tabs/tab.vue';
@@ -32,7 +47,7 @@ import lavContent from './components/layout/content/index.vue';
 import progressController from './components/progress/index.js';
 import modalController from './components/modal/index.js';
 import galleryController from './components/gallery/index.js';
-import notificationController from './components/notification/index.js'; 
+import notificationController from './components/notification/index.js';
 
 //directives
 import lavRipple from './directives/ripple/index.js';
@@ -48,11 +63,14 @@ const LavUI = {
     lavCheckboxGroup,
     lavDivider,
     lavDropdown,
+    lavDropdownMenu,
+    lavDropdownMenuItem,
     lavFileInput,
     lavGallery,
     lavGrid,
     lavInfinityScroll,
-    lavInput,
+    lavTextInput,
+    lavPasswordInput,
     lavModal,
     notificationController,
     lavPagination,
@@ -60,6 +78,10 @@ const LavUI = {
     lavRadio,
     lavRadioGroup,
     lavSelect,
+    lavSidebarMenu,
+    lavSidebarMenuThree,
+    lavSidebarMenuItem,
+    lavSidebarMenuDivider,
     lavSwitch,
     lavTabs,
     lavTab,
@@ -67,11 +89,11 @@ const LavUI = {
     lavTextarea,
     lavTooltip,
     lavUpper,
- 
+
     lavContainer,
     lavSidebar,
     lavContent,
- 
+
     install(Vue) {
         Vue.component('lav-avatar', lavAvatar);
         Vue.component('lav-breadcrumbs', lavBreadcrumbs);
@@ -80,18 +102,29 @@ const LavUI = {
         Vue.component('lav-checkbox', lavCheckbox);
         Vue.component('lav-checkbox-group', lavCheckboxGroup);
         Vue.component('lav-divider', lavDivider);
+
         Vue.component('lav-dropdown', lavDropdown);
+        Vue.component('lav-dropdown-menu', lavDropdownMenu);
+        Vue.component('lav-dropdown-menu-item', lavDropdownMenuItem);
+
         Vue.component('lav-file-input', lavFileInput);
         Vue.component('lav-gallery', lavGallery);
         Vue.component('lav-grid', lavGrid);
         Vue.component('lav-infinity-scroll', lavInfinityScroll);
-        Vue.component('lav-input', lavInput);
+
+        Vue.component('lav-text-input', lavTextInput);
+        Vue.component('lav-password-input', lavPasswordInput);
+
         Vue.component('lav-modal', lavModal);
         Vue.component('lav-pagination', lavPagination);
         Vue.component('lav-progress', lavProgress);
         Vue.component('lav-radio', lavRadio);
         Vue.component('lav-radio-group', lavRadioGroup);
         Vue.component('lav-select', lavSelect);
+        Vue.component('lav-sidebar-menu', lavSidebarMenu);
+        Vue.component('lav-sidebar-menu-three', lavSidebarMenuThree);
+        Vue.component('lav-sidebar-menu-item', lavSidebarMenuItem);
+        Vue.component('lav-sidebar-menu-divider', lavSidebarMenuDivider);
         Vue.component('lav-switch', lavSwitch);
         Vue.component('lav-tabs', lavTabs);
         Vue.component('lav-tab', lavTab);
@@ -103,10 +136,10 @@ const LavUI = {
         Vue.component('lav-container', lavContainer);
         Vue.component('lav-sidebar', lavSidebar);
         Vue.component('lav-content', lavContent);
-        
+
         Vue.directive('lav-ripple', lavRipple);
-        
-        
+
+
         Vue.prototype.$lavGallery = galleryController;
         Vue.prototype.$lavNotify = notificationController;
         Vue.prototype.$lavProgress = progressController;
@@ -124,11 +157,14 @@ export { lavCheckbox };
 export { lavCheckboxGroup };
 export { lavDivider };
 export { lavDropdown };
+export { lavDropdownMenu };
+export { lavDropdownMenuItem };
 export { lavFileInput };
 export { lavGallery };
 export { lavGrid };
 export { lavInfinityScroll };
-export { lavInput };
+export { lavTextInput };
+export { lavPasswordInput };
 export { lavModal };
 export { notificationController };
 export { lavPagination };
@@ -136,6 +172,10 @@ export { lavProgress };
 export { lavRadio };
 export { lavRadioGroup };
 export { lavSelect };
+export { lavSidebarMenu };
+export { lavSidebarMenuThree };
+export { lavSidebarMenuItem };
+export { lavSidebarMenuDivider };
 export { lavSwitch };
 export { lavTabs };
 export { lavTab };
@@ -147,4 +187,3 @@ export { lavUpper };
 export { lavContainer };
 export { lavSidebar };
 export { lavContent };
-

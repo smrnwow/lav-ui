@@ -2,11 +2,14 @@ import Color from 'color';
 
 export default {
   methods: {
-    setColor(clr) {
-      return Color(clr).alpha(0.3).rgb().string();
+    setColorTransparent(color, alpha) {
+      return Color(color).alpha(alpha).rgb().string();
     },
-    chooseColor(clr) {
-      return Color(clr).isDark() ? '#fff' : '#000';
+    setColorByContrast(color) {
+      return Color(color).isDark() ? '#fff' : 'rgba(0,0,0,.7)';
+    },
+    setGray(color) {
+      return Color(color).grayscale();
     }
   }
 }
