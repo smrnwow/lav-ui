@@ -54,9 +54,9 @@ export default {
   computed: {
     styles() {
       return {
-        backgroundColor: this.setColor(this.color),
+        backgroundColor: this.setColorTransparent(this.color, 0.3),
         color: this.color,
-        border: `1px solid ${this.color}`
+        boxShadow: `0 3px 6px ${this.setColorTransparent(this.color, 0.3)}`
       }
     }
   }

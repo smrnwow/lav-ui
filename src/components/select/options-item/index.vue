@@ -9,19 +9,23 @@
 export default {
   name: 'lav-select-options-item',
   props: {
-    data: {
-      type: Object,
-      default: () => ({})
-    },
+    data: Object,
     index: Number
   },
-  inject: ['selected'],
   methods: {
     getActive(option) {
-      return (this.selected.length && this.selected.includes(option)) ? 'lav-select-dropdown-item_active' : '';
+      return (this.$parent.selected.includes(option)) ? 'lav-select-dropdown-item_active' : '';
     },
     getHovered(option) {
-      return (this.cursor === option) ? 'lav-select-dropdown-item_hovered' : '';
+      return (this.$parent.cursor === option) ? 'lav-select-dropdown-item_hovered' : '';
+    },
+    select(data, index) {
+      this.$emit('select', data, index);
+    }
+  },
+  watch: {
+    selected(n) {
+      console.log(n, 'n');
     }
   }
 }

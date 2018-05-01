@@ -1,10 +1,9 @@
 <template>
   <div class="lav-thumbs">
     <div class="lav-thumbs-wrap">
-      <scroll>
+      <scroll :active="active">
         <square v-for="(src, i) in images" :key="i">
-          <div class="lav-thumbs-item" :class="[getActive(i)]" @click="select(i)" :style="styles(src)">
-          </div>
+          <div class="lav-thumbs-item" :class="[getActive(i)]" @click="select(i)" :style="styles(src)"></div>
         </square>
       </scroll>
     </div>

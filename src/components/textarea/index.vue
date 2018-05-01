@@ -67,7 +67,6 @@ export default {
 <style lang="css">
 .lav-textarea-wrap {
   position: relative;
-  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;

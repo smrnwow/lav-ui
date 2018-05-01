@@ -1,10 +1,10 @@
 <template lang="html">
-  <label class="lav-checkbox" :class="{ 'lav-checkbox-checked': checked }">
-    <input type="checkbox" class="lav-checkbox-input" v-model="checked" @change="handleChange" />
+  <label :class="classes">
+    <input type="checkbox" class="lav-checkbox-input" v-model="checked" @change="changeHandler" />
     <slot>
       <div class="lav-checkbox-indicator" :style="indicatorStyles">
         <transition :name="transitionName">
-          <span v-show="checked" class="lav-checkbox-indicator-wrap">
+          <span v-show="checked" class="lav-checkbox-indicator-wrap" :style="indicatorWrapStyles">
             <lav-icon :size="size" name="check-mark" color="#fff"></lav-icon>
           </span>
         </transition>
@@ -20,6 +20,10 @@ export default {
   components: { lavIcon },
   props: {
     value: Boolean,
+    color: {
+      type: String,
+      default: '#0286c2'
+    },
     name: {
       type: [String, Number],
       default: ''
@@ -34,7 +38,7 @@ export default {
     },
     transition: {
       type: String,
-      default: 'scale'
+      default: 'fade'
     }
   },
   data() {
@@ -43,7 +47,7 @@ export default {
     }
   },
   methods: {
-    handleChange(e) {
+    changeHandler(e) {
       if(!this.inGroup) {
         this.$emit('input', this.checked);
         this.$emit('change', this.checked);
@@ -53,13 +57,25 @@ export default {
     }
   },
   computed: {
+    classes() {
+      return [
+        'lav-checkbox',
+        { 'lav-checkbox-checked': this.checked }
+      ]
+    },
     inGroup() {
       return this.$parent.$options.name === 'lav-checkbox-group';
     },
     indicatorStyles() {
       return {
         height: this.size + 'px',
-        width: this.size + 'px'
+        width: this.size + 'px',
+        border: `2px solid ${this.color}`
+      }
+    },
+    indicatorWrapStyles() {
+      return {
+        backgroundColor: this.color
       }
     },
     transitionName() {

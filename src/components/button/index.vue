@@ -1,9 +1,9 @@
 <template lang="html">
-  <button class="lav-button" :style="styles" @mousedown="getActive" @mouseup="getInactive" @click="clickHandler">
+  <button :class="buttonClasses" :style="styles" @mousedown="getActive" @mouseup="getInactive" @click="clickHandler">
     <span class="lav-button-icon" v-if="hasIcon">
       <lav-icon :name="icon" :color="iconColor"></lav-icon>
     </span>
-    <span class="lav-button-body">
+    <span v-if="$slots.default && $slots.default.length" :class="bodyClasses">
       <slot></slot>
     </span>
   </button>
@@ -41,6 +41,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    rounded: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -54,6 +58,18 @@ export default {
     this.setStyles();
   },
   computed: {
+    buttonClasses() {
+      return [
+        'lav-button',
+        { 'lav-button-rounded': this.rounded }
+      ]
+    },
+    bodyClasses() {
+      return [
+        'lav-button-body',
+        { 'lav-button-body-with-icon': this.icon }
+      ]
+    },
     iconColor() {
       if(this.plain) {
         return this.color;
@@ -76,7 +92,6 @@ export default {
       } else if(!this.autocolor) {
         this.setNotAutocolorStyles();
       } else if(this.disabled) {
-        console.log('called');
         this.setDisabledStyles();
       }
     },
@@ -114,6 +129,11 @@ export default {
     clickHandler(e) {
       this.$emit('click', e);
       this.loading = !this.loading;
+    }
+  },
+  watch: {
+    color(n) {
+      this.setStyles();
     }
   }
 }

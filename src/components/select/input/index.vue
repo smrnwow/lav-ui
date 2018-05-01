@@ -1,77 +1,93 @@
-<template lang="html">
-  <span class="lav-input-wrap">
-    <button v-if="showButton" class="lav-input" ref="button" @click="buttonClickHandler"
-      @keydown.down="scrollDropdown" @keydown.up="scrollDropdown" @keydown.enter="keyBoardSelect">
-      <span v-if="showPlaceholder">{{ placeholder }}</span>
-      <lav-multiple-value-list v-if="showMultipleValue" :selected="selected" @remove="$emit('clear-multiple', e)" />
-      <span v-if="showSingleValue">{{ selected[0].name }}</span>
-    </button>
-    <input v-if="showInput" class="lav-input" tabindex type="text" v-model="val" @input="inputHandler" :placeholder="placeholder" @keydown.down="scrollDropdown" @keydown.up="scrollDropdown" @keydown.enter="keyBoardSelect" ref="searchInput" />
-    <span v-if="showCleaner" class="lav-input-cleaner" @click="$emit('clear')">
-      <lav-icon name="close" :size="9"></lav-icon>
+<template>
+  <div class="lav-select-label-wrap">
+    <span class="lav-select-wrap">
+      <button v-if="showInputButton" class="lav-input" @keydown.down="$emit('scroll', true)"
+        @keydown.up="$emit('scroll', false)" @keydown.enter="$emit('select')" @click="startSearching" ref="button">
+        <lav-select-multiple-value v-if="showMultipleValue" :selected="selected" @remove="removeSelectedItemHandler" />
+        <span v-if="!selected.length">{{ placeholder }}</span>
+        <span v-if="showSingleValue">{{ selected[0].name }}</span>
+      </button>
+      <input v-if="showInputField" class="lav-input" tabindex type="text" v-model="searchString" @input="searchHandler"
+        @keydown.down="$emit('scroll', true)" @keydown.up="$emit('scroll', false)" @keydown.enter="$emit('select')"
+        @click="startSearching" :placeholder="placeholder" ref="searchInput" />
+      <span v-if="showCleaner" class="lav-input-cleaner" @click="clearHandler">
+        <lav-icon name="close" :size="9"></lav-icon>
+      </span>
     </span>
-    <span class="lav-input-after">
-      <lav-icon name="arrow-down"></lav-icon>
+    <span class="lav-select-after" v-if="after" :style="bgColor">
+      <lav-icon name="arrow-down" :color="color"></lav-icon>
     </span>
-  </span>
+  </div>
 </template>
 
 <script>
+import colorMixin from '../../../mixins/color';
+
 import lavIcon from '../../icon';
-import lavMultipleValueList from '../multiple-value-list';
+import lavSelectMultipleValue from '../multiple-value-list';
+
 export default {
-  components: { lavIcon, lavMultipleValueList },
+  name: 'lav-select-input',
+  mixins: [colorMixin],
+  components: { lavIcon, lavSelectMultipleValue },
   props: {
-    status: String,
+    selected: Array,
     searchable: Boolean,
     multiple: Boolean,
     placeholder: String,
-    selected: Array,
-    value: String
+    after: Boolean,
+    searching: Boolean,
+    color: String
   },
   data() {
     return {
-      val: ''
-    }
-  },
-  computed: {
-    showButton() {
-      return (this.status !== 'searching');
-    },
-    showPlaceholder() {
-      return (this.status === 'inactive' || this.status === 'active');
-    },
-    showSingleValue() {
-      return (!this.multiple && this.status === 'selected');
-    },
-    showMultipleValue() {
-      return (this.multiple && this.status === 'selected');
-    },
-    showInput() {
-      return (this.status === 'searching' && this.searchable);
-    },
-    showCleaner() {
-      return this.val.length !== 0;
+      searchString: ''
     }
   },
   methods: {
-    inputHandler(e) {
-      this.$emit('input', this.val);
+    removeSelectedItemHandler(index) {
+      this.$emit('remove', index);
     },
-    buttonClickHandler() {
-      if(this.searchable) {
-        this.$emit('start-searching')
-      } else {
-        this.$emit('start-active')
-      }
-      this.$nextTick(this.focusOnInput);
+    clearHandler() {
+      this.$emit('clear');
+    },
+    searchHandler() {
+      this.$emit('search', this.searchString);
+    },
+    _setDropdownState(state) {
+      this.$emit('dropdown', state);
     },
     focusOnInput() {
-      this.searchable ? this.$refs.searchInput.focus() : this.$refs.button.focus();
+      this.$nextTick(() => {
+        this.searchable ? this.$refs.searchInput.focus() : this.$refs.button.focus();
+      });
+    },
+    startSearching() {
+      this.$emit('searching', true);
+      this.focusOnInput();
+    }
+  },
+  computed: {
+    showSingleValue() {
+      return !this.multiple && this.selected.length;
+    },
+    showInputButton() {
+      return !this.searching || !this.searchable;
+    },
+    showInputField() {
+      return this.searchable && this.searching;
+    },
+    showMultipleValue() {
+      return this.multiple && this.selected.length;
+    },
+    showCleaner() {
+      return ((this.searchString !== '') || this.selected.length > 0);
+    },
+    bgColor() {
+      return {
+        backgroundColor: this.setColorTransparent(this.color, 0.3)
+      }
     }
   }
 }
 </script>
-
-<style lang="css">
-</style>

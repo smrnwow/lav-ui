@@ -1,7 +1,7 @@
 <template lang="html">
   <label class="lav-label">
-    <span class="lav-input-before" v-if="before">
-      <lav-icon :name="beforeIcon" />
+    <span class="lav-input-before" v-if="before" :style="bgColor">
+      <lav-icon :name="beforeIcon" :color="color" />
     </span>
     <span :class="classes">
       <input type="text" class="lav-input" @input="update" v-model="val" :placeholder="placeholder" />
@@ -9,17 +9,19 @@
         <lav-icon name="close" :size="9" />
       </span>
     </span>
-    <span class="lav-input-after" v-if="after">
-      <lav-icon :name="afterIcon" />
+    <span class="lav-input-after" v-if="after" :style="bgColor">
+      <lav-icon :name="afterIcon" :color="color" />
     </span>
   </label>
 </template>
 
 <script>
 import lavIcon from '../icon';
+import colorMixin from '../../mixins/color';
 
 export default {
-  name: 'lav-input',
+  name: 'lav-text-input',
+  mixins: [colorMixin],
   components: { lavIcon },
   data() {
     return {
@@ -45,6 +47,10 @@ export default {
       type: String,
       default: 'pen'
     },
+    color: {
+      type: String,
+      default: '#0286c2'
+    },
     placeholder: String
   },
   computed: {
@@ -56,6 +62,11 @@ export default {
         'lav-input-wrap',
         { 'lav-input-wrap-with-after': this.after }
       ]
+    },
+    bgColor() {
+      return {
+        backgroundColor: this.setColorTransparent(this.color, 0.3)
+      }
     }
   },
   methods: {

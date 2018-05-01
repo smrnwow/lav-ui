@@ -11,7 +11,7 @@
                         <lav-icon name="arrow-left" :size="30"></lav-icon>
                     </button>
                     <transition :name="transition">
-                        <img class="lav-gallery-selected__image" :key="active" :src="images[active]" />
+                      <img class="lav-gallery-selected__image" :key="active" :src="images[active]" />
                     </transition>
                     <button class="lav-gallery-arrow lav-gallery-arrow_right" @click="next" :class="[nextDisabled]">
                         <lav-icon name="arrow-right" :size="30"></lav-icon>

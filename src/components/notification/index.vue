@@ -1,13 +1,12 @@
 <template lang="html">
   <transition :name="transitionName">
-    <div v-show="visible" class="lav-notification" :class="[classes]" 
+    <div v-show="visible" class="lav-notification" :class="[classes]"
       @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
       <div class="lav-notification-header">
         <lav-icon :name="type" :color="iconColor" :size="30" />
       </div>
       <div class="lav-notification-body">
         {{ text }}
-        {{ id }}
       </div>
       <span class="lav-notification-close" @click="close">
         <lav-icon name="close" :size="12" />
@@ -128,7 +127,7 @@ export default {
   transition: .2s ease-in-out;
 }
 .notif-enter {
-  opacity: 0;  
+  opacity: 0;
 }
 .notif-leave-to {
   transform: translateX(20px);

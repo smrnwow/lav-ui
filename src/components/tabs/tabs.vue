@@ -2,7 +2,7 @@
   <div class="tabs" :style="tabsStyles">
     <div class="tabs-nav" ref="nav" :style="navStyles">
       <slot></slot>
-      <span class="tabs-line" ref="line"></span>
+      <span class="tabs-line" ref="line" :style="lineColor"></span>
     </div>
     <transition name="fade" mode="out-in">
       <div class="tabs-content" :key="current">
@@ -22,6 +22,10 @@ export default {
     direction: {
       type: String,
       default: 'horizontal'
+    },
+    color: {
+      type: String,
+      default: '#0286c2'
     }
   },
   data() {
@@ -79,13 +83,18 @@ export default {
         this.$refs.line.style.height = '2px';
       } else {
         this.$refs.line.style.height = height + 'px';
-        this.$refs.line.style.top = (top - navTop) + 'px';        
+        this.$refs.line.style.top = (top - navTop) + 'px';
         this.$refs.line.style.left = 0;
         this.$refs.line.style.width = '2px';
       }
     }
   },
   computed: {
+    lineColor() {
+      return {
+        backgroundColor: this.color
+      }
+    },
     tabsStyles() {
       return {
         flexDirection: (this.direction === 'horizontal') ? 'column' : 'row'
@@ -140,7 +149,7 @@ export default {
 }
 .tab-vertical {
   margin: 2px 0;
-  border-left: 2px solid transparent;  
+  border-left: 2px solid transparent;
 }
 .tab-hovered-horizontal {
   border-bottom: 2px solid rgba(0,0,0, .2);

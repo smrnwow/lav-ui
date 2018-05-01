@@ -27,5 +27,8 @@ export default {
 .lav-menu-item-title {
   user-select: none;
   padding: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 18px;
 }
 </style>

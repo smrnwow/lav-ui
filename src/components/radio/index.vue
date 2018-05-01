@@ -1,27 +1,25 @@
 <template lang="html">
-  <label :class="classes">
-    <input type="radio" class="lav-radio-input" v-model="val" @change="changeHandler" />
+  <label :class="classes" :style="styles">
+    <input :value="checked" type="radio" class="lav-radio-input" @change="changeHandler" />
     <slot>
       <div class="lav-radio-indicator" :style="indicatorStyles">
         <transition :name="transitionName">
-          <span v-show="val" class="lav-radio-indicator-wrap"></span>
+          <span v-show="active" class="lav-radio-indicator-wrap" :style="indicatorWrapStyles"></span>
         </transition>
       </div>
     </slot>
-    {{ label }}
+    <span v-if="label" class="lav-radio-label">
+      {{ label }}
+    </span>
   </label>
 </template>
 
 <script>
 export default {
   props: {
-    value: Boolean,
+    value: [String, Number],
     label: {
       type: String,
-      default: ''
-    },
-    name: {
-      type: [String, Number],
       default: ''
     },
     size: {
@@ -31,29 +29,47 @@ export default {
     transition: {
       type: String,
       default: 'scale'
+    },
+    color: {
+      type: String,
+      default: '#0286c2'
     }
   },
   data() {
     return {
-      val: this.value
+      checked: false
     }
   },
   methods: {
     changeHandler(e) {
-      if(!this.inGroup) {
-        this.$emit('input', this.checked);
-        this.$emit('change', this.checked);
-      } else {
-        this.$parent.$emit('child-change', this.name);
-      }
+      let value = this.value ? this.value : this.label;
+      this.checked = true;
+      this.$parent.$emit('change', value);
     }
   },
   computed: {
+    active() {
+      if(this.label !== '') {
+        return this.label === this.$parent.active;
+      } else if(this.value !== '') {
+        return this.value === this.$parent.active;
+      } else {
+        return false;
+      }
+    },
     classes() {
       return [
         'lav-radio',
-        { 'lav-radio-checked': this.val }
+        { 'lav-radio-checked': this.active }
       ]
+    },
+    styles() {
+      return {
+        backgroundColor: (this.isButton && this.active) ? this.color : 'transparent'
+      }
+    },
+    isButton() {
+      return this.$parent.button;
     },
     inGroup() {
       return this.$parent.$options.name === 'lav-radio-group';
@@ -61,21 +77,39 @@ export default {
     indicatorStyles() {
       return {
         height: this.size + 'px',
-        width: this.size + 'px'
+        width: this.size + 'px',
+        border: `2px solid ${this.color}`
+      }
+    },
+    indicatorWrapStyles() {
+      return {
+        backgroundColor: this.color
       }
     },
     transitionName() {
       return `lav-${this.transition}`;
     }
+  },
+  watch: {
+    '$parent.active': function(n) {
+      console.log(n, 'do');
+      if(n !== this.label || n !== this.value) {
+        this.checked = false;
+      }
+    }
   }
 }
 </script>
-<style scoped>
+<style>
 .lav-radio {
   position: relative;
   display: flex;
   cursor: pointer;
+  padding: 10px;
   margin: 0;
+}
+.lav-radio-group {
+  display: flex;
 }
 .lav-radio-input {
   display: none;
@@ -84,17 +118,18 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid rgb(206, 212, 218);
   border-radius: 4px;
-  background: #fff;
+  background: transparent;
   border-radius: 50%;
 }
 .lav-radio-indicator-wrap {
   width: 50%;
   height: 50%;
-  background: rgb(206, 212, 218);
   border-radius: 50%;
   transform: scale(1.4);
+}
+.lav-radio-label {
+  margin-left: 5px;
 }
 .fade-scale-enter-active, .fade-scale-leave-active {
   transition: .2s;

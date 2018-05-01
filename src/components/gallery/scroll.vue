@@ -1,12 +1,14 @@
 <template lang="html">
   <div class="scroll" ref="scroll">
-    <div class="scroll-arrow scroll-arrow-back" @mousedown="scroll('backward', true)" @mouseup="scroll('backward', false)">
+    <!-- @mousedown="scroll('backward', true)" @mouseup="scroll('backward', false)" -->
+    <div class="scroll-arrow scroll-arrow-back" @click="backwardHandler">
       <lav-icon name="arrow-left" color="#fff"></lav-icon>
     </div>
-    <div class="scroll-wrap" :style="wrapStyles" ref="wrap">
+    <div class="scroll-wrap" :style="wrapStyles" ref="wrap" @dragstart="dragStartHandler" @dragend="dragEndHandler">
       <slot></slot>
     </div>
-    <div class="scroll-arrow scroll-arrow-forward" @mousedown="scroll('forward', true)" @mouseup="scroll('forward', false)">
+    <!-- @mousedown="scroll('forward', true)" @mouseup="scroll('forward', false)" -->
+    <div class="scroll-arrow scroll-arrow-forward" @click="forwardHandler">
       <lav-icon name="arrow-right" color="#fff"></lav-icon>
     </div>
   </div>
@@ -18,6 +20,10 @@ export default {
   components: { lavIcon },
   data() {
     return {
+      startPosition: 0,
+      wrapWidth: 0,
+      scrollWidth: 0,
+      childs: 0,
       transform: 0
     }
   },
@@ -25,12 +31,47 @@ export default {
     scrollSpeed: {
       type: Number,
       default: 150
-    }
+    },
+    smooth: {
+      type: Boolean,
+      default: false
+    },
+    active: Number
   },
   mounted() {
-    console.log(this.$slots);
+    this.scrollWidth = this.$refs.scroll.getBoundingClientRect().width;
+    setTimeout(() => {
+      this.wrapWidth = this.$refs.wrap.getBoundingClientRect().width;
+      this.childs = this.$slots.default.length;
+    }, 0);
   },
   methods: {
+    backwardHandler() {
+      this.prev();
+    },
+    forwardHandler() {
+      this.next();
+    },
+    next() {
+      if((-1 * (this.transform - this.eachChildWidth)) <= (this.wrapWidth - this.scrollWidth)) {
+        this.transform = this.transform - this.eachChildWidth;
+      }
+    },
+    prev() {
+      if((this.transform + this.eachChildWidth) <= 0) {
+        this.transform = this.transform + this.eachChildWidth;
+      }
+    },
+    dragStartHandler(e) {
+      this.startPosition = e.offsetX;
+    },
+    dragEndHandler(e) {
+
+      // this.transform = e.offsetX;
+    },
+    dragHandler(e) {
+      this.transform = e.offsetX;
+    },
     scroll(direction, flag) {
       const isForward = (direction === 'forward');
       const scrollWidth = this.$refs.scroll.getBoundingClientRect().width,
@@ -57,10 +98,24 @@ export default {
     }
   },
   computed: {
+    isScrollable() {
+      return this.scrollWidth > this.wrapWidth;
+    },
+    isScrollableBackward() {
+      return this.isScrollable && this.transform < 0;
+    },
+    isScrollableForward() {
+      return this.isScrollable && this.transform < this.wrapWidth;
+    },
     wrapStyles() {
       return {
         transform: 'translateX(' + this.transform + 'px)'
       }
+    }
+  },
+  watch: {
+    wrapWidth(width) {
+      this.eachChildWidth = (width / this.childs);
     }
   }
 }

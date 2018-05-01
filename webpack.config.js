@@ -2,7 +2,7 @@ let path = require('path');
 let webpack = require('webpack');
 
 module.exports = {
-	entry: './src/index.js',
+	entry: ['./src/styles/index.css', './src/index.js'],
 	output: {
 		filename: 'index.js',
 		path: path.resolve(__dirname, 'build'),
@@ -13,11 +13,11 @@ module.exports = {
 		rules: [
 		{
 			test: /\.css$/,
-			loader: 'css-loader'
-		},
-		{
-			test: /\.(woff|woff2|eot|ttf|otf)$/,
-			loader: 'file-loader'
+			use: [
+				'style-loader',
+				'css-loader',
+				'postcss-loader'
+			]
 		},
 		{
 			test: /\.js$/,
@@ -28,10 +28,6 @@ module.exports = {
 			test: /\.vue$/,
 			exclude: /node_modules/,
 			loader: 'vue-loader'
-		},
-		{
-			test: /\.html$/,
-			loader: 'html-loader'
 		}]
 	},
 	plugins: [

@@ -21,9 +21,12 @@ import smile from './smile';
 import star from './star';
 import remove from './remove';
 import send from './send';
+import plus from './plus';
+import message from './message';
+
 
 export default {
-  components: { close, arrowDown, arrowUp, arrowLeft, arrowRight, pen, eye, eyeClosed, heart, checkMark, success, alert, info, warning, smile, star, remove, send },
+  components: { close, arrowDown, arrowUp, arrowLeft, arrowRight, pen, eye, eyeClosed, heart, checkMark, success, alert, info, warning, smile, star, remove, send, plus, message },
   props: {
     name: String,
     size: {

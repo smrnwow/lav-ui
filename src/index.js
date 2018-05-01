@@ -18,9 +18,14 @@ import lavGallery from './components/gallery/gallery.vue';
 import lavGrid from './components/images-grid/index.vue';
 import lavInfinityScroll from './components/infinity-scroll/index.vue';
 
+import lavIcon from './components/icon';
+
 //inputs
 import lavTextInput from './components/text-input';
 import lavPasswordInput from './components/password-input';
+
+//loader
+import lavLoader from './components/loader';
 
 import lavModal from './components/modal/modal.vue';
 import lavPagination from './components/pagination/index.vue';
@@ -28,10 +33,10 @@ import lavProgress from './components/progress/index.vue';
 import lavRadio from './components/radio/index.vue';
 import lavRadioGroup from './components/radio-group/index.vue';
 import lavSelect from './components/select/index.vue';
-import lavSidebarMenu from './components/sidebar-menu';
-import lavSidebarMenuThree from './components/sidebar-menu/three';
-import lavSidebarMenuItem from './components/sidebar-menu/item';
-import lavSidebarMenuDivider from './components/sidebar-menu/divider';
+import lavSidebarMenu from './components/menu';
+import lavSidebarMenuThree from './components/menu/three';
+import lavSidebarMenuItem from './components/menu/item';
+import lavSidebarMenuDivider from './components/menu/divider';
 import lavSwitch from './components/switch/index.vue';
 import lavTabs from './components/tabs/tabs.vue';
 import lavTab from './components/tabs/tab.vue';
@@ -52,6 +57,8 @@ import notificationController from './components/notification/index.js';
 //directives
 import lavRipple from './directives/ripple/index.js';
 
+//helpers
+import lavImagePreload from './helpers/image-preload';
 
 
 const LavUI = {
@@ -68,6 +75,7 @@ const LavUI = {
     lavFileInput,
     lavGallery,
     lavGrid,
+    lavIcon,
     lavInfinityScroll,
     lavTextInput,
     lavPasswordInput,
@@ -83,6 +91,7 @@ const LavUI = {
     lavSidebarMenuItem,
     lavSidebarMenuDivider,
     lavSwitch,
+    lavLoader,
     lavTabs,
     lavTab,
     lavTag,
@@ -93,6 +102,8 @@ const LavUI = {
     lavContainer,
     lavSidebar,
     lavContent,
+
+    lavImagePreload,
 
     install(Vue) {
         Vue.component('lav-avatar', lavAvatar);
@@ -111,6 +122,7 @@ const LavUI = {
         Vue.component('lav-gallery', lavGallery);
         Vue.component('lav-grid', lavGrid);
         Vue.component('lav-infinity-scroll', lavInfinityScroll);
+        Vue.component('lav-icon', lavIcon);
 
         Vue.component('lav-text-input', lavTextInput);
         Vue.component('lav-password-input', lavPasswordInput);
@@ -126,6 +138,7 @@ const LavUI = {
         Vue.component('lav-sidebar-menu-item', lavSidebarMenuItem);
         Vue.component('lav-sidebar-menu-divider', lavSidebarMenuDivider);
         Vue.component('lav-switch', lavSwitch);
+        Vue.component('lav-loader', lavLoader);
         Vue.component('lav-tabs', lavTabs);
         Vue.component('lav-tab', lavTab);
         Vue.component('lav-tag', lavTag);
@@ -139,6 +152,7 @@ const LavUI = {
 
         Vue.directive('lav-ripple', lavRipple);
 
+        Vue.component('lav-preload-image', lavImagePreload);
 
         Vue.prototype.$lavGallery = galleryController;
         Vue.prototype.$lavNotify = notificationController;
@@ -163,6 +177,7 @@ export { lavFileInput };
 export { lavGallery };
 export { lavGrid };
 export { lavInfinityScroll };
+export { lavIcon };
 export { lavTextInput };
 export { lavPasswordInput };
 export { lavModal };
@@ -177,6 +192,7 @@ export { lavSidebarMenuThree };
 export { lavSidebarMenuItem };
 export { lavSidebarMenuDivider };
 export { lavSwitch };
+export { lavLoader };
 export { lavTabs };
 export { lavTab };
 export { lavTag };
@@ -187,3 +203,6 @@ export { lavUpper };
 export { lavContainer };
 export { lavSidebar };
 export { lavContent };
+
+
+export { lavImagePreload };

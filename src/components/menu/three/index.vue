@@ -2,7 +2,7 @@
   <div class="lav-menu-three">
     <div class="lav-menu-three-title" @click="toggle">
       <slot name="title"></slot>
-      <lav-icon :name="icon" :size="14" />
+      <lav-icon :name="icon" color="#fff" :size="14" />
     </div>
     <div class="lav-menu-three-content" ref="body">
       <slot name="body"></slot>
@@ -32,8 +32,10 @@ export default {
     },
     setHeight() {
       if(this.visible) {
+        this.$refs.body.style.height = 'auto';
         this.$refs.body.style.height = this.$refs.body.scrollHeight + 'px';
       } else {
+        this.$refs.body.style.height = 'auto';
         this.$refs.body.style.height = '0px';
       }
       if(this.$parent.$options.name === 'lav-three') {
@@ -43,7 +45,7 @@ export default {
   },
   computed: {
     icon() {
-      return this.visible ? 'arrow-down' : 'arrow-up';
+      return this.visible ? 'arrow-down' : 'arrow-left';
     }
   },
   mounted() {
@@ -62,6 +64,9 @@ export default {
   display: flex;
   align-items: center;
   cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 18px;
 }
 .lav-menu-three-content {
   padding-left: 10px;

@@ -51,6 +51,12 @@ export default {
     toggle() {
       this.visible = !this.visible;
     },
+    blur(e) {
+      if(!this.$refs.wrap.contains(e.target)) this.close();
+    },
+    onScroll() {
+      if(this.visible) this.setStyles();
+    },
     addListeners() {
       if(this.trigger === 'click') {
         this.$refs.trigger.addEventListener('click', this.toggle);
@@ -58,12 +64,8 @@ export default {
         this.$refs.trigger.addEventListener('mouseover', this.open);
         this.$refs.trigger.addEventListener('mouseleave', this.close)
       }
-      window.addEventListener('click', e => {
-        if(!this.$refs.wrap.contains(e.target)) this.close();
-      });
-      window.addEventListener('scroll', e => {
-        if(this.visible) this.setStyles();
-      });
+      window.addEventListener('click', this.blur);
+      window.addEventListener('scroll', this.onScroll);
     },
     removeListeners() {
       if(this.trigger === 'click') {
@@ -72,12 +74,8 @@ export default {
         this.$refs.trigger.removeEventListener('mouseover', this.open);
         this.$refs.trigger.removeEventListener('mouseleave', this.close)
       }
-      window.removeEventListener('click', e => {
-        if(!this.$refs.wrap.contains(e.target)) this.close();
-      });
-      window.removeEventListener('scroll', e => {
-        if(this.visible) this.setStyles();
-      })
+      window.removeEventListener('click', this.blur);
+      window.removeEventListener('scroll', this.onScroll);
     }
   },
   computed: {
