@@ -4,7 +4,7 @@
       <slot name="title"></slot>
       <lav-icon :name="icon" color="#fff" :size="14" />
     </div>
-    <div class="lav-menu-three-content" ref="body">
+    <div :class="classes" ref="body">
       <slot name="body"></slot>
     </div>
   </div>
@@ -32,39 +32,17 @@ export default {
     },
     hide() {
       this.visible = false;
-    },
-    getChildrens() {
-      return this.$children
-        .filter(item => item.$options.name === 'lav-three')
-        .map(item => item.$el.offsetHeight);
-    },
-    setHeight() {
-      if(this.visible) {
-        this.$refs.body.style.height = this.$refs.body.scrollHeight + 'px';
-      } else {
-        this.$refs.body.style.height = '0px';
-      }
-      this.$nextTick(() => {
-        this.parentRerender()
-      });
-    },
-    parentRerender() {
-      if(this.$parent.$options.name === 'lav-three') {
-        this.$parent.setHeight();
-      }
     }
   },
   computed: {
+    classes() {
+      return [
+        'lav-menu-three-content',
+        { 'lav-menu-three-content--opened': this.visible }
+      ]
+    },
     icon() {
       return this.visible ? 'arrow-down' : 'arrow-left';
-    }
-  },
-  mounted() {
-    this.setHeight();
-  },
-  watch: {
-    visible(n) {
-      this.setHeight();
     }
   }
 }
@@ -80,9 +58,12 @@ export default {
   font-size: 18px;
 }
 .lav-menu-three-content {
+  height: 0px;
   padding-left: 10px;
-
   overflow-y: hidden;
   transition: .2s ease-in-out;
+}
+.lav-menu-three-content--opened {
+  height: auto;
 }
 </style>
