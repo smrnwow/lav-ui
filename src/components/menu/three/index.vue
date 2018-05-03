@@ -15,6 +15,9 @@ import lavIcon from '../../icon';
 export default {
   name: 'lav-three',
   components: { lavIcon },
+  props: {
+    name: String
+  },
   data() {
     return {
       visible: true
@@ -30,14 +33,22 @@ export default {
     hide() {
       this.visible = false;
     },
+    getChildrens() {
+      return this.$children
+        .filter(item => item.$options.name === 'lav-three')
+        .map(item => item.$el.offsetHeight);
+    },
     setHeight() {
       if(this.visible) {
-        this.$refs.body.style.height = 'auto';
         this.$refs.body.style.height = this.$refs.body.scrollHeight + 'px';
       } else {
-        this.$refs.body.style.height = 'auto';
         this.$refs.body.style.height = '0px';
       }
+      this.$nextTick(() => {
+        this.parentRerender()
+      });
+    },
+    parentRerender() {
       if(this.$parent.$options.name === 'lav-three') {
         this.$parent.setHeight();
       }

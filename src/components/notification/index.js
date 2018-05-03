@@ -11,12 +11,24 @@ const NotifyController = {
     config: {
       position: 'top-right',
       offset: 20,
-      max: 3  
+      max: 3
     },
     notifs: [],
     id: 0
   },
-  add(opts = {}) {
+  info(opts = {}) {
+    this._add({ ...opts, type: 'info' });
+  },
+  alert(opts = {}) {
+    this._add({ ...opts, type: 'alert' });
+  },
+  success(opts = {}) {
+    this._add({ ...opts, type: 'success' });
+  },
+  warning(opts = {}) {
+    this._add({ ...opts, type: 'warning' });
+  },
+  _add(opts = {}) {
     let instance = new Factory({ data: opts });
     this._setState(opts);
     this._spread(instance);
@@ -40,11 +52,11 @@ const NotifyController = {
   },
   _createInstance(instance) {
     instance.vm = instance.$mount();
-    instance.vm.id = this.state.id++;  
+    instance.vm.id = this.state.id++;
     this.state.notifs.push(instance.vm);
     document.body.append(instance.vm.$el);
-    instance.vm.visible = true;  
-    instance.vm.$on('close', id => this._remove(id));        
+    instance.vm.visible = true;
+    instance.vm.$on('close', id => this._remove(id));
   },
   _remove(id) {
     this.state.notifs = this.state.notifs.filter(item => item.id !== id);

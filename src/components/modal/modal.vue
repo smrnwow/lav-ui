@@ -3,7 +3,7 @@
     <transition name="lav-fade">
       <div v-if="overlayVisible" class="lav-modal-overlay"></div>
     </transition>
-    <transition name="lav-slide-up">
+    <transition name="lav-fade">
       <div class="lav-modal" v-show="visible" :style="styles">
         <div class="lav-modal-inner">
           <div class="lav-modal-header">

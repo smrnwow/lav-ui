@@ -1,15 +1,14 @@
 <template>
-  <div class="lav-select-label-wrap">
+  <div class="lav-select-label-wrap" @click="startSearching">
     <span class="lav-select-wrap">
       <button v-if="showInputButton" class="lav-input" @keydown.down="$emit('scroll', true)"
-        @keydown.up="$emit('scroll', false)" @keydown.enter="$emit('select')" @click="startSearching" ref="button">
+        @keydown.up="$emit('scroll', false)" @keydown.enter="selectHandler" ref="button">
         <lav-select-multiple-value v-if="showMultipleValue" :selected="selected" @remove="removeSelectedItemHandler" />
         <span v-if="!selected.length">{{ placeholder }}</span>
         <span v-if="showSingleValue">{{ selected[0].name }}</span>
       </button>
-      <input v-if="showInputField" class="lav-input" tabindex type="text" v-model="searchString" @input="searchHandler"
-        @keydown.down="$emit('scroll', true)" @keydown.up="$emit('scroll', false)" @keydown.enter="$emit('select')"
-        @click="startSearching" :placeholder="placeholder" ref="searchInput" />
+      <input v-if="showInputField" class="lav-input" type="text" v-model="searchString" @input="searchHandler"
+        @keydown.down="$emit('scroll', true)" @keydown.up="$emit('scroll', false)" @keydown.enter="$emit('select')" :placeholder="placeholder" ref="searchInput" />
       <span v-if="showCleaner" class="lav-input-cleaner" @click="clearHandler">
         <lav-icon name="close" :size="9"></lav-icon>
       </span>
@@ -36,7 +35,6 @@ export default {
     multiple: Boolean,
     placeholder: String,
     after: Boolean,
-    searching: Boolean,
     color: String
   },
   data() {
@@ -45,6 +43,9 @@ export default {
     }
   },
   methods: {
+    selectHandler() {
+      this.$emit('select');
+    },
     removeSelectedItemHandler(index) {
       this.$emit('remove', index);
     },
@@ -54,28 +55,33 @@ export default {
     searchHandler() {
       this.$emit('search', this.searchString);
     },
-    _setDropdownState(state) {
-      this.$emit('dropdown', state);
-    },
     focusOnInput() {
       this.$nextTick(() => {
         this.searchable ? this.$refs.searchInput.focus() : this.$refs.button.focus();
       });
     },
-    startSearching() {
-      this.$emit('searching', true);
+    startSearching(e) {
+      this.setSearching(true);
+      this.setDropdownState(true);
       this.focusOnInput();
-    }
+    },
+    setSearching(state) {
+      this.$parent.searching = state;
+    },
+    setDropdownState(state) {
+      console.log(state, 'called input');
+      this.$emit('dropdown', state);
+    },
   },
   computed: {
     showSingleValue() {
       return !this.multiple && this.selected.length;
     },
     showInputButton() {
-      return !this.searching || !this.searchable;
+      return !this.$parent.searching || !this.searchable;
     },
     showInputField() {
-      return this.searchable && this.searching;
+      return this.searchable && this.$parent.searching;
     },
     showMultipleValue() {
       return this.multiple && this.selected.length;

@@ -22,11 +22,6 @@ export default {
     select(data, index) {
       this.$emit('select', data, index);
     }
-  },
-  watch: {
-    selected(n) {
-      console.log(n, 'n');
-    }
   }
 }
 </script>

@@ -1,21 +1,49 @@
 <template lang="html">
-  <label class="lav-select-label" ref="wrap">
-    <lav-select-input :selected="selected" :searchable="searchable" :multiple="multiple" :placeholder="placeholder"
-      :after="after" :color="color" :searching="searching" @remove="removeSelectedHandler" @clear="clearHandler" @dropdown="setDropdownState" @search="searchHandler" @scroll="scrollHandler" @select="keyBoardSelectHandler" @searching="startSearchingHandler" />
+  <div class="lav-select-label" ref="wrap">
+    <div class="lav-select-label-wrap">
+      <span class="lav-select-wrap">
+        <button v-if="showInputButton" class="lav-input" @keydown.down="scrollHandler(true)" @click="startSearching"
+          @keydown.up="scrollHandler(false)" @keydown.enter="keyBoardSelectHandler" ref="button">
+          <lav-select-multiple-value
+            v-if="showMultipleValue" :selected="selected" @remove="removeSelectedItemHandler"
+          />
+          <span v-if="!selected.length">{{ placeholder }}</span>
+          <span v-if="showSingleValue">{{ selected[0].name }}</span>
+        </button>
+        <input v-if="showInputField" class="lav-input" type="text" v-model="searchString" @click="startSearching"
+          @input="searchHandler" @keydown.down="scrollHandler(true)" @keydown.up="scrollHandler(false)"
+          @keydown.enter="keyBoardSelectHandler" :placeholder="placeholder" ref="searchInput" />
+        <span v-if="showCleaner" class="lav-input-cleaner" @click="clearHandler">
+          <lav-icon name="close" :size="9"></lav-icon>
+        </span>
+      </span>
+      <span class="lav-select-after" v-if="after" :style="bgColor">
+        <lav-icon name="arrow-down" :color="color"></lav-icon>
+      </span>
+    </div>
     <transition name="fade">
-      <lav-select-options-list v-show="dropdownVisible" :options="getOptions" :cursor="cursor" :selected="selected"
-        @select="selectHandler" />
+      <div class="lav-select-dropdown" v-if="dropdownVisible" ref="dropdown">
+        <div class="lav-select-dropdown-item" v-for="(option, i) in getOptions" :key="option.lavId"
+          @click="selectHandler(option, i)" :class="[getActiveOption(option), getHoveredOption(i)]">
+          {{ option.name }}
+        </div>
+        <div v-if="!getOptions.length" class="lav-select-dropdown-item">Ничего не найдено</div>
+      </div>
     </transition>
-  </label>
+  </div>
 </template>
 
 <script>
-import lavSelectInput from './input';
-import lavSelectOptionsList from './options-list';
+import colorMixin from '../../mixins/color';
+
+import lavIcon from '../icon';
+import lavSelectMultipleValue from './multiple-value-list';
+
 
 export default {
   name: 'lav-select',
-  components: { lavSelectInput, lavSelectOptionsList },
+  mixins: [colorMixin],
+  components: { lavIcon, lavSelectMultipleValue },
   props: {
     multiple: {
       type: Boolean,
@@ -32,9 +60,6 @@ export default {
     options: {
       type: Array,
       default: () => ([])
-    },
-    searchAction: {
-      type: Function
     },
     after: {
       type: Boolean,
@@ -56,11 +81,6 @@ export default {
       numeredOptions: []
     }
   },
-  provide() {
-    return {
-      selected: this.selected
-    }
-  },
   created() {
     this.getNumered(this.options);
   },
@@ -71,11 +91,8 @@ export default {
     window.removeEventListener('click', this.inputBlur);
   },
   methods: {
-    searchHandler(e) {
-      this.searchString = e;
-      this.filteredOptions = this.getOptions.filter(item => {
-        return item.name.match(new RegExp(this.searchString, 'ig'))
-      });
+    getNumered(options) {
+      this.numeredOptions = options.map((item, i) => ({ ...item, lavId: i }));
     },
     inputBlur(e) {
       if(!this.$refs.wrap.contains(e.target)) this.setDropdownState(false);
@@ -83,35 +100,39 @@ export default {
     setCursor(index) {
       this.cursor = index;
     },
-    selectHandler(item, index) {
-      if(!this.multiple) this.selected = [];
-      if(!this.selected.includes(item)) this.selected.push(item);
-
-      if(this.multiple) {
-        this.$emit('input', this.selected);
-        this.$emit('select', this.selected);
-      } else {
-        this.$emit('input', this.selected[0]);
-        this.$emit('select', this.selected[0]);
-      }
-      this.setCursor(index);
-      if(!this.multiple) {
-        this.searching = false;
-        this.setDropdownState(false);
-      }
-    },
-    startSearchingHandler() {
-      this.searching = true;
+    startSearching(e) {
+      this.setSearching(true);
       this.setDropdownState(true);
+      this.focusOnInput();
+    },
+    setSearching(state) {
+      this.searching = state;
+    },
+    focusOnInput() {
+      this.$nextTick(() => {
+        this.searchable ? this.$refs.searchInput.focus() : this.$refs.button.focus();
+      });
+    },
+    searchHandler() {
+      this.filteredOptions = this.getOptions.filter(item => {
+        return item.name.match(new RegExp(this.searchString, 'ig'))
+      });
+    },
+    selectHandler(item, index) {
+      this.clearIfNotMultiple();
+      this.addToSelected(item);
+      this.multiple ? this.emit(this.selected) : this.emit(this.selected[0]);
+      this.setCursor(index);
+      this.setSearching(false);
+      if(!this.multiple) this.setDropdownState(false);
     },
     keyBoardSelectHandler() {
       this.selectHandler(this.getOptions[this.cursor], this.cursor);
     },
     clearHandler() {
       this.selected = [];
-      this.$emit('input', this.selected);
-      this.$emit('select', this.selected);
-      this.setCursor(0, 'clear');
+      this.emit(this.selected);
+      this.setCursor(0);
       this.searchString = '';
       this.filteredOptions = [];
     },
@@ -123,15 +144,55 @@ export default {
       }
     },
     setDropdownState(state) {
-      this.$nextTick(() => {
-        this.dropdownVisible = state;
-      })
+      this.$nextTick(() => this.dropdownVisible = state);
     },
-    removeSelectedHandler(index) {
+
+    removeSelectedItemHandler(index) {
       this.selected.splice(index, 1);
     },
-    getNumered(options) {
-      this.numeredOptions = options.map((item, i) => ({ ...item, lavId: i }));
+
+
+    clearIfNotMultiple() {
+      if(!this.multiple) this.selected = [];
+    },
+    addToSelected(item) {
+      if(!this.selected.includes(item)) this.selected.push(item);
+    },
+    emit(selected) {
+      this.$emit('input', selected);
+      this.$emit('select', selected);
+    },
+
+    //dropdown scroll
+    scrollDropdown(newCursor, oldCursor) {
+      if((newCursor > oldCursor) && (newCursor <= (this.options.length - 1))) {
+        this.toBottom(this.$refs.dropdown, newCursor);
+      } else if((newCursor < oldCursor) && (newCursor >= 0)) {
+        this.toTop(this.$refs.dropdown, newCursor);
+      }
+    },
+    toBottom(list, cursor) {
+      let activeItem = list.children[cursor];
+      let escapeTop = activeItem.offsetTop < list.scrollTop;
+      let escapeBottom = (activeItem.offsetTop + activeItem.offsetHeight) >= (list.offsetHeight + list.scrollTop);
+      if(escapeTop) list.scrollTop = activeItem.offsetTop;
+      if(escapeBottom) list.scrollTop = (activeItem.offsetTop + activeItem.offsetHeight) - list.offsetHeight;
+    },
+    toTop(list, cursor) {
+      let activeItem = list.children[cursor];
+      let escapeBottom = activeItem.offsetTop > (list.scrollTop + list.offsetHeight);
+      let escapeTop = (activeItem.offsetTop - activeItem.offsetHeight) < list.scrollTop;
+      if(escapeBottom) list.scrollTop = (activeItem.offsetTop + activeItem.offsetHeight) - list.offsetHeight;
+      if(escapeTop) list.scrollTop = activeItem.offsetTop;
+    },
+
+
+    //options
+    getActiveOption(option) {
+      return (this.selected.includes(option)) ? 'lav-select-dropdown-item_active' : '';
+    },
+    getHoveredOption(option) {
+      return (this.cursor === option) ? 'lav-select-dropdown-item_hovered' : '';
     }
   },
   watch: {
@@ -149,6 +210,33 @@ export default {
     }
   },
   computed: {
+    isFirstOption() {
+      return this.cursor > 0;
+    },
+    isLastOption() {
+      return this.cursor < (this.getOptions.length - 1);
+    },
+    showSingleValue() {
+      return !this.multiple && this.selected.length;
+    },
+    showInputButton() {
+      return !this.searching || !this.searchable;
+    },
+    showInputField() {
+      return this.searchable && this.searching;
+    },
+    showMultipleValue() {
+      return this.multiple && this.selected.length;
+    },
+    showCleaner() {
+      return ((this.searchString !== '') || this.selected.length > 0);
+    },
+    bgColor() {
+      return {
+        backgroundColor: this.setColorTransparent(this.color, 0.3)
+      }
+    },
+
     getOptions() {
       return (this.searchString) ? this.filteredOptions : this.numeredOptions;
     },

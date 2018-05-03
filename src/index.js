@@ -33,10 +33,10 @@ import lavProgress from './components/progress/index.vue';
 import lavRadio from './components/radio/index.vue';
 import lavRadioGroup from './components/radio-group/index.vue';
 import lavSelect from './components/select/index.vue';
-import lavSidebarMenu from './components/menu';
-import lavSidebarMenuThree from './components/menu/three';
-import lavSidebarMenuItem from './components/menu/item';
-import lavSidebarMenuDivider from './components/menu/divider';
+import lavMenu from './components/menu';
+import lavMenuThree from './components/menu/three';
+import lavMenuItem from './components/menu/item';
+import lavMenuDivider from './components/menu/divider';
 import lavSwitch from './components/switch/index.vue';
 import lavTabs from './components/tabs/tabs.vue';
 import lavTab from './components/tabs/tab.vue';
@@ -86,10 +86,10 @@ const LavUI = {
     lavRadio,
     lavRadioGroup,
     lavSelect,
-    lavSidebarMenu,
-    lavSidebarMenuThree,
-    lavSidebarMenuItem,
-    lavSidebarMenuDivider,
+    lavMenu,
+    lavMenuThree,
+    lavMenuItem,
+    lavMenuDivider,
     lavSwitch,
     lavLoader,
     lavTabs,
@@ -133,10 +133,10 @@ const LavUI = {
         Vue.component('lav-radio', lavRadio);
         Vue.component('lav-radio-group', lavRadioGroup);
         Vue.component('lav-select', lavSelect);
-        Vue.component('lav-sidebar-menu', lavSidebarMenu);
-        Vue.component('lav-sidebar-menu-three', lavSidebarMenuThree);
-        Vue.component('lav-sidebar-menu-item', lavSidebarMenuItem);
-        Vue.component('lav-sidebar-menu-divider', lavSidebarMenuDivider);
+        Vue.component('lav-menu', lavMenu);
+        Vue.component('lav-menu-three', lavMenuThree);
+        Vue.component('lav-menu-item', lavMenuItem);
+        Vue.component('lav-menu-divider', lavMenuDivider);
         Vue.component('lav-switch', lavSwitch);
         Vue.component('lav-loader', lavLoader);
         Vue.component('lav-tabs', lavTabs);
@@ -187,10 +187,10 @@ export { lavProgress };
 export { lavRadio };
 export { lavRadioGroup };
 export { lavSelect };
-export { lavSidebarMenu };
-export { lavSidebarMenuThree };
-export { lavSidebarMenuItem };
-export { lavSidebarMenuDivider };
+export { lavMenu };
+export { lavMenuThree };
+export { lavMenuItem };
+export { lavMenuDivider };
 export { lavSwitch };
 export { lavLoader };
 export { lavTabs };
