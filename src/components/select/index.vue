@@ -17,17 +17,17 @@
           <lav-icon name="close" :size="9"></lav-icon>
         </span>
       </span>
-      <span class="lav-select-after" v-if="after" :style="bgColor">
+      <span class="lav-select-after" v-if="after" :style="bgColor" @click="startSearching">
         <lav-icon name="arrow-down" :color="color"></lav-icon>
       </span>
     </div>
     <transition name="fade">
-      <div class="lav-select-dropdown" v-if="dropdownVisible" ref="dropdown">
+      <div class="lav-select-dropdown" v-show="dropdownVisible" ref="dropdown">
         <div class="lav-select-dropdown-item" v-for="(option, i) in getOptions" :key="option.lavId"
           @click="selectHandler(option, i)" :class="[getActiveOption(option), getHoveredOption(i)]">
           {{ option.name }}
         </div>
-        <div v-if="!getOptions.length" class="lav-select-dropdown-item">Ничего не найдено</div>
+        <div v-if="showNoDataOption" class="lav-select-dropdown-item">Ничего не найдено</div>
       </div>
     </transition>
   </div>
@@ -68,6 +68,10 @@ export default {
     color: {
       type: String,
       default: '#0286c2'
+    },
+    target: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -114,7 +118,7 @@ export default {
       });
     },
     searchHandler() {
-      this.filteredOptions = this.getOptions.filter(item => {
+      this.filteredOptions = this.numeredOptions.filter(item => {
         return item.name.match(new RegExp(this.searchString, 'ig'))
       });
     },
@@ -159,8 +163,13 @@ export default {
       if(!this.selected.includes(item)) this.selected.push(item);
     },
     emit(selected) {
-      this.$emit('input', selected);
-      this.$emit('select', selected);
+      let cloneSelected = JSON.parse(JSON.stringify(selected));
+      if(this.target) {
+        cloneSelected = (cloneSelected.length) ?
+          cloneSelected.map(item => item[this.target]) : cloneSelected[this.target];
+      }
+      this.$emit('input', cloneSelected);
+      this.$emit('select', cloneSelected);
     },
 
     //dropdown scroll
@@ -207,6 +216,9 @@ export default {
         }
       });
       this.setCursor(entry);
+    },
+    cursor(n, o) {
+      this.scrollDropdown(n, o);
     }
   },
   computed: {
